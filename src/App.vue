@@ -1,26 +1,31 @@
 <template>
   <v-app>
-    <Nav />
+    <nav-bar v-if="showNav" />
     <v-main>
-      <HelloWorld />
+      <router-view/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
-import Nav from './components/nav/Nav.vue';
+import NavBar from './components/nav/nav-bar.vue';
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
-    Nav,
+    NavBar,
   },
-
-  data: () => ({
-    //
-  }),
+  computed: {
+    showNav() {
+      return !this.$route.meta.isPublic;
+    },
+  },
 };
 </script>
+
+<style>
+.full-height {
+  height: 100%;
+}
+</style>
