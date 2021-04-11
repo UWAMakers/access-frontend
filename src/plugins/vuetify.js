@@ -14,7 +14,7 @@ export default new Vuetify({
         success: '#4CAF50',
         info: '#2196F3',
         warning: '#FB8C00',
-        error: '#E91E63',
+        error: '#F44336',
       },
       light: {
         primary: '#303030',
@@ -23,7 +23,7 @@ export default new Vuetify({
         success: '#4CAF50',
         info: '#2196F3',
         warning: '#FB8C00',
-        error: '#E91E63',
+        error: '#F44336',
       },
     },
   },

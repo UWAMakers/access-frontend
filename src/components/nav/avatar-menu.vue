@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="$user">
     <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
         <v-btn icon v-on="on" v-bind="attrs">
@@ -16,11 +16,9 @@
             <v-icon>mdi-account-circle</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>
-              {{$user.firstName}} {{$user.lastName}}
-            </v-list-item-title>
+            <v-list-item-title> {{ $user.firstName }} {{ $user.lastName }} </v-list-item-title>
             <v-list-item-subtitle>
-              {{$user.username}}
+              {{ $user.username }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
