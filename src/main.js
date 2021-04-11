@@ -9,6 +9,19 @@ Vue.config.productionTip = false;
 
 Vue.mixin(authMixin);
 
+const requireModule = require.context(
+  // The path where the service modules live
+  './components/global',
+  // Whether to look in subfolders
+  false,
+  // Only include .js files (prevents duplicate imports`)
+  /\.vue$/,
+);
+requireModule
+  .keys()
+  .map((modulePath) => requireModule(modulePath).default)
+  .forEach((comp) => Vue.component(comp.name, comp));
+
 store.dispatch('auth/authenticate').catch(() => store.dispatch('auth/logout')).then(() => {
   new Vue({
     router,

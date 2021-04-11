@@ -18,6 +18,30 @@ const feathersClient = feathers()
           discard('__id', '__isTemp'),
         ),
       ],
+      find: [
+        async (ctx) => {
+          if (ctx.arguments[0] && ctx.arguments[0].paginate !== false) return ctx;
+          const { data, limit, total } = await ctx.service.find({
+            ...ctx.arguments[0],
+            paginate: true,
+          });
+          if (total <= limit) {
+            // eslint-disable-next-line no-param-reassign
+            ctx.result = data;
+            return ctx;
+          }
+          const parts = [];
+          for (let skip = limit; skip < total; skip += limit) parts.push(skip);
+          const results = await Promise.all(parts.map(async (skip) => (await ctx.service.find({
+            ...ctx.arguments[0],
+            query: { ...ctx.params.query, $limit: limit, $skip: skip },
+            paginate: true,
+          })).data));
+          // eslint-disable-next-line no-param-reassign
+          ctx.result = results.reduce((a, result) => [...a, ...result], data);
+          return ctx;
+        },
+      ],
     },
   });
 

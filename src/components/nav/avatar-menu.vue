@@ -2,13 +2,7 @@
   <div v-if="$user">
     <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn icon v-on="on" v-bind="attrs">
-          <v-avatar color="primary" size="36">
-            <span :class="!$vuetify.theme.dark ? 'white--text' : 'black--text'">
-              {{ initials }}
-            </span>
-          </v-avatar>
-        </v-btn>
+        <user-avatar :user="$user" size="36" v-on="on" v-bind="attrs" />
       </template>
       <v-list>
         <v-list-item>
@@ -16,7 +10,7 @@
             <v-icon>mdi-account-circle</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title> {{ $user.firstName }} {{ $user.lastName }} </v-list-item-title>
+            <v-list-item-title> {{ $user.name }} </v-list-item-title>
             <v-list-item-subtitle>
               {{ $user.username }}
             </v-list-item-subtitle>
@@ -54,14 +48,15 @@
 </template>
 
 <script>
+import UserAvatar from '@/components/users/avatar.vue';
+
 export default {
-  data: () => ({}),
+  components: {
+    UserAvatar,
+  },
   computed: {
-    initials() {
-      return this.$user.firstName.charAt(0) + this.$user.lastName.charAt(0);
-    },
     isAdmin() {
-      return this.$user.roles.includes('admin');
+      return this.$user.roles.includes('admin') || this.$user.roles.includes('super_admin');
     },
   },
 };

@@ -23,15 +23,13 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn
+      <primary-btn
         :disabled="!username || !password"
         :loading="loading"
-        color="primary"
-        depressed
         @click="submit"
       >
         Login
-      </v-btn>
+      </primary-btn>
     </v-card-actions>
   </v-card>
 </template>

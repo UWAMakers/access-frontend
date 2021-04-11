@@ -1,14 +1,26 @@
 // src/store/services/users.js
 import feathersClient, { makeServicePlugin, BaseModel } from '../../feathers-client';
 
+const fix = (name = '') => name.trim().replace(/\s+\(\d+\)$/, '');
+
 class User extends BaseModel {
   // Required for $FeathersVuex plugin to work after production transpile.
   static modelName = 'User'
 
-  // Define default properties here
+  // eslint-disable-next-line no-unused-vars
+  static setupInstance(data, { store, models }) {
+    return {
+      ...data,
+      name: !data.displayName || fix(data.displayName) === fix(data.firstName)
+        ? `${fix(data.firstName)} ${data.lastName}`
+        : fix(data.displayName),
+    };
+  }
+
   static instanceDefaults() {
     return {
-      email: '',
+      preferences: { dark: false },
+      roles: [],
     };
   }
 }

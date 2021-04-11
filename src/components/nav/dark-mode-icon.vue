@@ -21,6 +21,14 @@ export default {
       this.$vuetify.theme.dark = !!this.$user.preferences.dark;
     }
   },
+  watch: {
+    '$user.preferences.dark': {
+      handler(to, from) {
+        if (to === from || to === this.$vuetify.theme.dark) return;
+        this.$vuetify.theme.dark = to;
+      },
+    },
+  },
   methods: {
     toggleDarkMode() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
