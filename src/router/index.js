@@ -19,6 +19,12 @@ const routes = [
     meta: { roles: ['admin', 'super_admin'] },
   },
   {
+    path: '/training-config/:id?',
+    name: 'training-config',
+    component: () => import(/* webpackChunkName: "training-config" */ '../views/TrainingConfig.vue'),
+    meta: { roles: ['admin', 'super_admin'] },
+  },
+  {
     path: '/login',
     name: 'Login',
     component: Login,
