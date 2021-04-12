@@ -16,13 +16,7 @@
           <v-icon>mdi-database-search</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-text-field
-            v-model.trim="search"
-            label="User Search"
-            outlined
-            dense
-            hide-details
-          />
+          <v-text-field v-model.trim="search" label="User Search" outlined dense hide-details />
         </v-list-item-content>
       </v-list-item>
 
@@ -41,10 +35,10 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>
-                {{item.name}}
+                {{ item.name }}
               </v-list-item-title>
               <v-list-item-subtitle>
-                {{item.username}}
+                {{ item.username }}
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -88,15 +82,17 @@ export default {
       const reg = searchRegex(this.search);
       return User.findInStore({
         query: {
-          ...(this.search ? {
-            $or: [
-              { name: reg },
-              { firstName: reg },
-              { lastName: reg },
-              { displayName: reg },
-              { username: reg },
-            ],
-          } : {}),
+          ...(this.search
+            ? {
+              $or: [
+                { name: reg },
+                { firstName: reg },
+                { lastName: reg },
+                { displayName: reg },
+                { username: reg },
+              ],
+            }
+            : {}),
           $sort: { name: 1, username: 1 },
         },
       }).data;
@@ -117,7 +113,8 @@ export default {
   methods: {
     async loadUsers() {
       const { User } = this.$FeathersVuex.api;
-      const existingIds = User.findInStore().data.map((u) => u._id);
+      // eslint-disable-next-line
+      const existingIds = User.findInStore().data.map(u => u._id);
       this.loading = true;
       try {
         await User.find({
