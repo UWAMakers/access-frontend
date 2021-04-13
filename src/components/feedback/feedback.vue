@@ -40,7 +40,7 @@ export default {
         msg: this.msg,
       });
       await newFeedback.save();
-      this.msg = ' ';
+      this.msg = '';
       this.loading = false;
       this.showSnackbar({
         text: 'Feedback received!',

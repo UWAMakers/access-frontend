@@ -10,14 +10,12 @@
 
 <script>
 import NavBar from './components/nav/nav-bar.vue';
-import GlobalSnackbar from './components/global/global-snackbar.vue';
 
 export default {
   name: 'App',
 
   components: {
     NavBar,
-    GlobalSnackbar,
   },
   computed: {
     showNav() {
