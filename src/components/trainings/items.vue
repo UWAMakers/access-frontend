@@ -15,13 +15,13 @@
             <strong>{{item.name}}</strong>
             <v-spacer />
             <v-chip small class="mr-2">
-              {{types.find(t => t.value === item.type || 'comment').text}}
+              {{types.find(t => t.value === item.type).text}}
             </v-chip>
             <delete-dialog :name="item.name" @delete="deleteItem(item)" />
           </v-row>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          Item Edit
+          <edit-item :id="item._id" />
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -30,10 +30,12 @@
 
 <script>
 import TrainingAdd from '@/components/trainings/add.vue';
+import EditItem from '@/components/trainings/edit-item.vue';
 
 export default {
   components: {
     TrainingAdd,
+    EditItem,
   },
   props: {
     value: {
