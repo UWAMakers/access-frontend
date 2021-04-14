@@ -35,7 +35,7 @@
           </template>
         </v-autocomplete>
       </v-card-text>
-      <v-list>
+      <v-list class="user-list">
         <v-list-item v-for="user in selectedUsers" :key="user._id">
           <v-list-item-icon class="mr-2">
             <user-avatar :user="user" size="36" />
@@ -156,3 +156,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.user-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+</style>

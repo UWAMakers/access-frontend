@@ -50,6 +50,19 @@
     </v-col>
     <v-col cols="6" class="py-0">
       <v-text-field
+        v-show="visibleFields.includes('expiry')"
+        v-model.number="item.expiry"
+        label="Expiry (weeks)"
+        hint="Zero/Blank means never expires"
+        type="number"
+        step="1"
+        min="0"
+        outlined
+        dense
+      />
+    </v-col>
+    <v-col cols="6" class="py-0">
+      <v-text-field
         v-show="visibleFields.includes('requiredScore')"
         :value="item.requiredScore * 100"
         v-model.number="item.requiredScore"
@@ -64,24 +77,11 @@
         @input="$set(item, 'requiredScore', $event / 100)"
       />
     </v-col>
-    <v-col cols="6" class="py-0">
-      <v-text-field
-        v-show="visibleFields.includes('expiry')"
-        v-model.number="item.expiry"
-        label="Expiry (weeks)"
-        hint="Zero/Blank means never expires"
-        type="number"
-        step="1"
-        min="0"
-        outlined
-        dense
-      />
-    </v-col>
     <v-col cols="auto" class="py-0">
       <v-checkbox
         v-show="visibleFields.includes('required')"
         v-model="item.required"
-        label="Is Required"
+        label="Required"
         class="mt-0"
         outlined
         dense
