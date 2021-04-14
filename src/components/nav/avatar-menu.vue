@@ -41,6 +41,14 @@
           </v-list-item-title>
         </v-list-item>
         <v-divider v-if="isAdmin" />
+        <v-list-item to="/bug-report">
+          <v-list-item-icon>
+            <v-icon>mdi-bug</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>
+            Report bug
+          </v-list-item-title>
+        </v-list-item>
         <v-list-item to="/logout">
           <v-list-item-icon>
             <v-icon>mdi-logout</v-icon>

@@ -2,7 +2,8 @@
   <v-app>
     <nav-bar v-if="showNav" />
     <v-main>
-      <router-view/>
+      <global-snackbar />
+      <router-view />
     </v-main>
   </v-app>
 </template>

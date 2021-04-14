@@ -7,7 +7,16 @@
 </template>
 
 <script>
-const colors = ['#52BDC5', '#F46960', '#FCB25E', '#008F4D', '#515151', '#EF5273', '#0091C5', '#0078BA'];
+const colors = [
+  '#52BDC5',
+  '#F46960',
+  '#FCB25E',
+  '#008F4D',
+  '#515151',
+  '#EF5273',
+  '#0091C5',
+  '#0078BA',
+];
 
 export default {
   props: {
@@ -21,6 +30,7 @@ export default {
       return this.user.firstName.charAt(0) + this.user.lastName.charAt(0);
     },
     color() {
+      // eslint-disable-next-line
       const num = parseInt(this.user._id.substr(-4, 4), 16);
       return colors[num % colors.length];
     },
