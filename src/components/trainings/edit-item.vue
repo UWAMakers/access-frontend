@@ -1,5 +1,5 @@
 <template>
-  <v-row align="center">
+  <v-row align="center" class="pb-2">
     <v-col cols="12" class="pb-0">
       <v-text-field
         v-model.trim="item.name"
@@ -22,7 +22,7 @@
       <v-text-field
         v-show="visibleFields.includes('url')"
         v-model.trim="item.url"
-        :label="item.type === 'quiz' ? 'Quiz URL' : 'URL'"
+        :label="urlLabel"
         outlined
         dense
       />
@@ -31,7 +31,7 @@
       <v-text-field
         v-show="visibleFields.includes('csvUrl')"
         v-model.trim="item.csvUrl"
-        label="CSV URL"
+        label="Results CSV URL"
         outlined
         dense
       />
@@ -44,19 +44,6 @@
         label="Training"
         item-text="name"
         item-value="_id"
-        outlined
-        dense
-      />
-    </v-col>
-    <v-col cols="6" class="py-0">
-      <v-text-field
-        v-show="visibleFields.includes('expiry')"
-        v-model.number="item.expiry"
-        label="Expiry (weeks)"
-        hint="Zero/Blank means never expires"
-        type="number"
-        step="1"
-        min="0"
         outlined
         dense
       />
@@ -77,6 +64,19 @@
         @input="$set(item, 'requiredScore', $event / 100)"
       />
     </v-col>
+    <v-col cols="6" class="py-0">
+      <v-text-field
+        v-show="visibleFields.includes('expiry')"
+        v-model.number="item.expiry"
+        label="Expiry (weeks)"
+        hint="Zero/Blank means never expires"
+        type="number"
+        step="1"
+        min="0"
+        outlined
+        dense
+      />
+    </v-col>
     <v-col cols="auto" class="py-0">
       <v-checkbox
         v-show="visibleFields.includes('required')"
@@ -89,10 +89,15 @@
       />
     </v-col>
     <v-spacer />
+    <user-selector
+      v-if="visibleFields.includes('inductorIds')"
+      v-model="item.inductorIds"
+      label="Inductors"
+    />
     <primary-btn
       :disabled="!item.name"
       :loading="loading"
-      class="mb-1 mr-3"
+      class="mr-3 ml-2"
       @click="saveItem"
     >
       Save
@@ -101,7 +106,12 @@
 </template>
 
 <script>
+import UserSelector from '@/components/input/user-selector.vue';
+
 export default {
+  components: {
+    UserSelector,
+  },
   props: {
     id: {
       type: String,
@@ -125,6 +135,16 @@ export default {
           return ['required', 'trainingId'];
         default:
           return ['url'];
+      }
+    },
+    urlLabel() {
+      switch (this.item.type) {
+        case 'quiz':
+          return 'Google Quiz URL';
+        case 'induction':
+          return 'Induction Checklist URL';
+        default:
+          return 'URL';
       }
     },
     trainings() {

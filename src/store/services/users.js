@@ -9,11 +9,13 @@ class User extends BaseModel {
 
   // eslint-disable-next-line no-unused-vars
   static setupInstance(data, { store, models }) {
+    const name = !data.displayName || fix(data.displayName) === fix(data.firstName)
+      ? `${fix(data.firstName)} ${data.lastName}`
+      : fix(data.displayName);
     return {
       ...data,
-      name: !data.displayName || fix(data.displayName) === fix(data.firstName)
-        ? `${fix(data.firstName)} ${data.lastName}`
-        : fix(data.displayName),
+      name,
+      text: `${name} (${data.username})`,
     };
   }
 
