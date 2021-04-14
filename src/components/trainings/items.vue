@@ -5,10 +5,12 @@
       <v-spacer />
       <training-add service="training-items" @create="itemCreated" />
     </v-card-title>
+    <v-divider />
     <v-expansion-panels accordion>
       <v-expansion-panel
         v-for="item in items"
         :key="item._id"
+        class="item-panel"
       >
         <v-expansion-panel-header>
           <v-row align="center" class="pl-2 pr-4">
@@ -111,3 +113,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.item-panel::before {
+  box-shadow: none;
+}
+</style>
