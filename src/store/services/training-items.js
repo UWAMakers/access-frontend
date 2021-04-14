@@ -1,34 +1,25 @@
-// src/store/services/users.js
 import feathersClient, { makeServicePlugin, BaseModel } from '../../feathers-client';
 
-const fix = (name = '') => name.trim().replace(/\s+\(\d+\)$/, '');
-
-class User extends BaseModel {
+class TrainingItem extends BaseModel {
   // Required for $FeathersVuex plugin to work after production transpile.
-  static modelName = 'User'
+  static modelName = 'TrainingItem'
 
   // eslint-disable-next-line no-unused-vars
   static setupInstance(data, { store, models }) {
-    const name = !data.displayName || fix(data.displayName) === fix(data.firstName)
-      ? `${fix(data.firstName)} ${data.lastName}`
-      : fix(data.displayName);
     return {
       ...data,
-      name,
-      text: `${name} (${data.username})`,
     };
   }
 
   static instanceDefaults() {
     return {
-      preferences: { dark: false },
-      roles: [],
+      itemIds: [],
     };
   }
 }
-const servicePath = 'users';
+const servicePath = 'training-items';
 const servicePlugin = makeServicePlugin({
-  Model: User,
+  Model: TrainingItem,
   service: feathersClient.service(servicePath),
   servicePath,
 });

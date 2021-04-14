@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="secondary" dark clipped-left>
+  <v-app-bar app color="secondary" dark clipped-left class="elevation-1">
     <div>
       <v-btn to="/" color="accent" text class="mx-1">Home</v-btn>
       <v-btn to="/training" color="accent" text class="mx-1">Training</v-btn>
