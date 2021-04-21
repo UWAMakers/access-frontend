@@ -89,9 +89,7 @@ export default {
           paginate: false,
         });
       } catch (err) {
-        // TODO: render error
-        // eslint-disable-next-line no-console
-        console.error(err);
+        this.$handleError(err, 'loading training items');
       }
       this.loading = false;
     },
@@ -102,11 +100,10 @@ export default {
       this.loading = true;
       try {
         await item.remove();
+        this.$success('removed training item');
         this.$emit('input', this.value.filter((id) => id !== item._id));
       } catch (err) {
-        // TODO: render error
-        // eslint-disable-next-line no-console
-        console.error(err);
+        this.$handleError(err, 'deleting training item');
       }
       this.loading = false;
     },

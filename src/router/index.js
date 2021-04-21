@@ -35,7 +35,6 @@ const routes = [
     path: '/bug-report',
     name: 'Bug Report',
     component: Feedback,
-
   },
 ];
 
@@ -45,8 +44,6 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // eslint-disable-next-line no-console
-  console.log(to);
   const isPublic = to.matched.some((record) => !!record.meta.isPublic);
   const user = store.getters['auth/user'];
   if (to.path === '/logout') {

@@ -96,12 +96,6 @@ export default {
           $sort: { name: 1, username: 1 },
         },
       }).data;
-      // return Array.from({ length: 10000 }, (k, v) => v + 1).map((i) => ({
-      //   _id: `5e9d5f23d0d05358${`${i}`.padStart(8, '0')}`,
-      //   username: `${i}`.padStart(8, '0'),
-      //   firstName: 'User',
-      //   lastName: `No. ${i}`,
-      // }));
     },
     userId() {
       return this.$route.params.id;
@@ -113,8 +107,7 @@ export default {
   methods: {
     async loadUsers() {
       const { User } = this.$FeathersVuex.api;
-      // eslint-disable-next-line
-      const existingIds = User.findInStore().data.map(u => u._id);
+      const existingIds = User.findInStore().data.map((u) => u._id);
       this.loading = true;
       try {
         await User.find({
@@ -124,9 +117,7 @@ export default {
           paginate: false,
         });
       } catch (err) {
-        // TODO: render error
-        // eslint-disable-next-line no-console
-        console.error(err);
+        this.$handleError(err, 'loading users');
       }
       this.loading = false;
     },

@@ -126,10 +126,9 @@ export default {
         this.$emit('create', this.item);
         this.init();
         this.dialog = false;
+        this.$success(`created new ${this.title}`);
       } catch (err) {
-        // TODO: render error
-        // eslint-disable-next-line no-console
-        console.error(err);
+        this.$handleError(err, `creating ${this.title}`);
       }
       this.loading = false;
     },
