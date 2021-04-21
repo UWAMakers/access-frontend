@@ -138,9 +138,7 @@ export default {
           paginate: false,
         });
       } catch (err) {
-        // TODO: render error
-        // eslint-disable-next-line no-console
-        console.error(err);
+        this.$handleError(err, 'loading users');
       }
       this.loading = false;
     },

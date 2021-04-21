@@ -37,12 +37,11 @@ export default {
     // eslint-disable-next-line func-names
     savePref: debouncePromise(async function () {
       try {
-        if (!this.$user.preferences) this.$user.preferences = {};
+        this.$user.preferences ??= {};
         this.$user.preferences.dark = this.$vuetify.theme.dark;
         await this.$user.save();
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
+        this.$handleError(err, 'saving dark mode preference');
       }
     }, 1000),
   },

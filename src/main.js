@@ -4,10 +4,12 @@ import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
 import authMixin from './mixins/auth.mixin';
+import errorMixin from './mixins/error.mixin';
 
 Vue.config.productionTip = false;
 
 Vue.mixin(authMixin);
+Vue.mixin(errorMixin);
 
 const requireModule = require.context(
   // The path where the service modules live

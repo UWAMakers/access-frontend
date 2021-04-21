@@ -92,9 +92,7 @@ export default {
         if (!config) config = await Training.get(this.id);
         this.config = config.clone();
       } catch (err) {
-        // TODO: render error
-        // eslint-disable-next-line no-console
-        console.error(err);
+        this.$handleError(err, 'loading training config');
       }
       this.loading = false;
     },
@@ -111,15 +109,24 @@ export default {
           case 'delete':
             await this.config.remove();
             this.$router.push('/training-config');
+            this.$success('removed training config');
             break;
           default:
             await this.config.save();
+            this.$success('saved training config');
             await this.loadConfig();
         }
       } catch (err) {
-        // TODO: render error
-        // eslint-disable-next-line no-console
-        console.error(err);
+        switch (action) {
+          case 'patch-items':
+            this.$handleError(err, 'adding/removing training item to/from config');
+            break;
+          case 'delete':
+            this.$handleError(err, 'deleting training config');
+            break;
+          default:
+            this.$handleError(err, 'saving training config');
+        }
       }
       this.loading = false;
     },

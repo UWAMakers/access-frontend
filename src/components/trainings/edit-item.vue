@@ -177,9 +177,7 @@ export default {
         if (!item) item = await TrainingItem.get(this.id);
         this.item = item.clone();
       } catch (err) {
-        // TODO: render error
-        // eslint-disable-next-line no-console
-        console.error(err);
+        this.$handleError(err, 'loading training item');
       }
       this.loading = false;
     },
@@ -188,10 +186,9 @@ export default {
       try {
         await this.item.save();
         await this.loadItem();
+        this.$success('saved training item');
       } catch (err) {
-        // TODO: render error
-        // eslint-disable-next-line no-console
-        console.error(err);
+        this.$handleError(err, 'saving training item');
       }
       this.loading = false;
     },

@@ -18,19 +18,23 @@ const servicePlugins = requireModule
   .keys()
   .map((modulePath) => requireModule(modulePath).default);
 
+const defaultSnack = () => ({
+  visible: false,
+  text: '',
+  timeout: 6000,
+  severity: 'info',
+  errorReport: null,
+});
+
 export default new Vuex.Store({
   state: {
-    snackbar: {
-      visible: false,
-      text: '',
-      timeout: 6000,
-      severity: 'info',
-    },
+    snackbar: defaultSnack(),
   },
   mutations: {
     showSnackbar(state, payload) {
       state.snackbar = {
-        ...state.snackbar,
+        ...defaultSnack(),
+        visible: true,
         ...payload,
       };
     },
@@ -38,10 +42,10 @@ export default new Vuex.Store({
       state.snackbar = {
         ...state.snackbar,
         visible: false,
-        timeout: 6000,
-        text: '',
-        severity: 'info',
       };
+      setTimeout(() => {
+        state.snackbar = defaultSnack();
+      }, 200);
     },
   },
   getters: {

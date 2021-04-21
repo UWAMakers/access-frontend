@@ -1,14 +1,22 @@
 <template>
   <v-snackbar
-    bottom
     v-model="snackbar.visible"
     :timeout="snackbar.timeout"
     :color="snackbar.severity"
+    bottom
   >
-    <v-icon v-if="statusIcon(snackbar.severity)"> mdi-{{ statusIcon(snackbar.severity) }}</v-icon>
+    <v-icon v-if="statusIcon" left>mdi-{{ statusIcon }}</v-icon>
     {{ snackbar.text }}
-    <template v-slot:action="{ attrs }">
-      <v-btn text v-bind="attrs" @click="closeSnackbar">
+    <template #action>
+      <primary-btn
+        v-show="snackbar.errorReport"
+        :loading="loading"
+        class="mr-2"
+        @click="report"
+      >
+        Report Error
+      </primary-btn>
+      <v-btn text @click="closeSnackbar">
         Close
       </v-btn>
     </template>
@@ -20,15 +28,17 @@ import { mapMutations } from 'vuex';
 
 export default {
   name: 'GlobalSnackbar',
+  data() {
+    return {
+      loading: false,
+    };
+  },
   computed: {
     snackbar() {
       return this.$store.state.snackbar;
     },
-  },
-  methods: {
-    ...mapMutations(['closeSnackbar']),
-    statusIcon(status) {
-      switch (status) {
+    statusIcon() {
+      switch (this.snackbar.severity) {
         case 'success': {
           return 'check';
         }
@@ -45,7 +55,22 @@ export default {
       }
     },
   },
+  methods: {
+    ...mapMutations(['closeSnackbar']),
+    async report() {
+      const { Feedback } = this.$FeathersVuex.api;
+      const report = new Feedback({
+        msg: this.snackbar.errorReport,
+      });
+      this.loading = true;
+      try {
+        await report.save();
+        this.$success('sent error report');
+      } catch (err) {
+        this.$handleError(err, 'sending an error report');
+      }
+      this.loading = false;
+    },
+  },
 };
 </script>
-
->

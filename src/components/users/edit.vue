@@ -122,9 +122,7 @@ export default {
         if (!user) user = await User.get(this.id);
         this.user = user.clone();
       } catch (err) {
-        // TODO: render error
-        // eslint-disable-next-line no-console
-        console.error(err);
+        this.$handleError(err, 'loading user');
       }
       this.loading = false;
     },
@@ -132,11 +130,10 @@ export default {
       this.loading = true;
       try {
         await this.user.save();
+        this.$success('saved user');
         await this.loadUser();
       } catch (err) {
-        // TODO: render error
-        // eslint-disable-next-line no-console
-        console.error(err);
+        this.$handleError(err, 'saving user');
       }
       this.loading = false;
     },
