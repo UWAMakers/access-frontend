@@ -2,7 +2,7 @@
   <v-dialog
     :value="value"
     max-width="300"
-    persistent="persistent"
+    :persistent="persistent"
     @input="$emit('toggle-dialog', !value)"
   >
     <v-card>

@@ -2,12 +2,7 @@
   <div v-if="$user">
     <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
-        <v-badge
-          bottom
-          overlap
-          icon="mdi-chevron-down"
-          color="black"
-        >
+        <v-badge bottom overlap icon="mdi-chevron-down" color="black">
           <user-avatar :user="$user" size="36" v-on="on" v-bind="attrs" />
         </v-badge>
       </template>

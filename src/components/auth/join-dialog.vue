@@ -6,6 +6,7 @@
       :cancelFn="cancelFn"
       :confirmFn="confirmFn"
       titleText="Join Makers?"
+      persistent="persistent"
       bodyText="Joining makers will add you to our mailing list
        and allow you to participate in inductions."
     />
@@ -29,16 +30,14 @@ export default {
   }),
   mounted() {
     this.openDialog = !this.$user?.preferences?.joinedAt;
-    console.log(this.$user);
   },
   methods: {
     toggleDialog(isOpen) {
       this.openDialog = isOpen;
     },
-    cancelFn() {
-      this.$store.dispatch('auth/logout').then(() => {
-        this.$router.push('login');
-      });
+    async cancelFn() {
+      console.log('cancelling');
+      this.$router.push('/logout');
     },
     async unjoin() {
       this.$user.preferences.joinedAt = null;
