@@ -53,7 +53,7 @@
         Get everyone that has received the induction to scan this QR code.
       </p>
       <p>
-        If they cannot scan it for whatever reason, please add them bellow
+        If they cannot scan it for whatever reason, please add them below
         <br>
         and we will send them an email with the link.
       </p>

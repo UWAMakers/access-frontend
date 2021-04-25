@@ -4,14 +4,15 @@
     <v-card-title>Login</v-card-title>
     <v-card-text>
       <v-alert v-show="errMsg" color="error">
-        There was a problem logging you in:<br>
-        {{errMsg}}
+        There was a problem logging you in:<br />
+        {{ errMsg }}
       </v-alert>
       <v-text-field
         v-model.trim="username"
         label="Pheme Number"
         placeholder="12345678"
         outlined
+        @keypress.enter="submit"
       />
       <v-text-field
         v-model="password"
@@ -23,11 +24,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <primary-btn
-        :disabled="!username || !password"
-        :loading="loading"
-        @click="submit"
-      >
+      <primary-btn :disabled="!username || !password" :loading="loading" @click="submit">
         Login
       </primary-btn>
     </v-card-actions>

@@ -8,15 +8,20 @@
       </slot>
     </template>
     <v-card>
-      <v-card-title>
-        Delete {{name}}?
-      </v-card-title>
+      <v-card-title> Delete {{ name }}? </v-card-title>
       <v-card-actions>
         <v-spacer />
         <v-btn text @click="dialog = false">
           Cancel
         </v-btn>
-        <v-btn text color="error" @click="dialog = false; $emit('delete');">
+        <v-btn
+          text
+          color="error"
+          @click="
+            dialog = false;
+            $emit('delete');
+          "
+        >
           Delete
         </v-btn>
       </v-card-actions>
