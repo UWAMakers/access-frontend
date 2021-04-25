@@ -49,6 +49,9 @@
     </v-card-actions>
     <v-card-text v-if="url" class="text-center">
       <qr :url="url" style="max-width: 300px" />
+      <p v-if="$isDev">
+        <a target="_blank" :href="url">{{url}}</a>
+      </p>
       <p>
         Get everyone that has received the induction to scan this QR code.
       </p>
@@ -109,7 +112,7 @@ export default {
     },
     url() {
       if (!this.induction) return '';
-      const key = this.induction.keys.find((k) => !k.userIds);
+      const key = this.induction.keys.find((k) => !k.userIds?.length);
       return `${window.location.origin}/induction/${key?.key}`;
     },
     excludeIds() {

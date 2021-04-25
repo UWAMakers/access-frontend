@@ -31,6 +31,13 @@
               :to="item.trainingId || undefined"
               :target="!item.trainingId ? '_blank' : ''"
             >
+              <v-list-item-icon class="mr-2">
+                <v-icon v-if="itemStatus(item)" color="success">mdi-check-circle-outline</v-icon>
+                <v-icon v-else-if="itemStatus(item) === false" color="error">
+                  mdi-close-circle-outline
+                </v-icon>
+                <v-icon v-else-if="item.type !== 'comment'">mdi-circle-outline</v-icon>
+              </v-list-item-icon>
               <v-tooltip top>
                 <template #activator="{ on }">
                   <v-list-item-content v-on="on">
@@ -130,6 +137,32 @@ export default {
         default:
           return 'Open';
       }
+    },
+    itemStatus(item) {
+      const { Completion } = this.$FeathersVuex.api;
+      const res = (val) => (!val && !item.required ? null : !!val);
+      if (item.type === 'induction') {
+        return res(this.config?.completion?.()?.items?.some((i) => i.itemId === item._id
+          && (!i.expiresAt || (new Date(i.expiresAt)).getTime() >= Date.now())
+          && i.confirmed));
+      }
+      if (item.type === 'quiz') {
+        return res(this.config?.completion?.()?.items?.some((i) => i.itemId === item._id
+          && (!i.expiresAt || (new Date(i.expiresAt)).getTime() >= Date.now())
+          && i.score >= (item.requiredScore ?? 0.5)));
+      }
+      if (item.type === 'completion') {
+        const { total } = Completion.findInStore({
+          query: {
+            trainingId: item.trainingId,
+            userId: this.$user._id,
+            status: 'complete',
+            $limit: 0,
+          },
+        });
+        return res(total);
+      }
+      return null;
     },
   },
 };

@@ -9,5 +9,8 @@ export default {
     $isSuperAdmin() {
       return !!this.$user?.roles?.includes('super_admin');
     },
+    $isDev() {
+      return process.env.NODE_ENV !== 'production';
+    },
   },
 };
