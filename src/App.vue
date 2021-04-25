@@ -29,4 +29,8 @@ export default {
 .full-height {
   height: 100%;
 }
+
+.v-main__wrap {
+  padding-bottom: 16px !important;
+}
 </style>

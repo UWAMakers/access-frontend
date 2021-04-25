@@ -1,46 +1,25 @@
 import feathersClient, { makeServicePlugin, BaseModel } from '../../feathers-client';
 
-class Training extends BaseModel {
+class Completion extends BaseModel {
   // Required for $FeathersVuex plugin to work after production transpile.
-  static modelName = 'Training'
+  static modelName = 'Completion'
 
   // eslint-disable-next-line no-unused-vars
   static setupInstance(data, { store, models }) {
     return {
       ...data,
-      isLocked() {
-        if (!this.parentIds?.length) return false;
-        const { total } = models.api.Completion.findInStore({
-          query: {
-            trainingId: { $in: this.parentIds },
-            userId: store.getters['auth/user']._id,
-            status: 'complete',
-            $limit: 0,
-          },
-        });
-        return total !== this.parentIds.length;
-      },
-      completion() {
-        const { data: comps } = models.api.Completion.findInStore({
-          query: {
-            trainingId: this._id,
-            userId: store.getters['auth/user']._id,
-          },
-        });
-        return comps[0];
-      },
     };
   }
 
   static instanceDefaults() {
     return {
-      itemIds: [],
+      items: [],
     };
   }
 }
-const servicePath = 'trainings';
+const servicePath = 'completions';
 const servicePlugin = makeServicePlugin({
-  Model: Training,
+  Model: Completion,
   service: feathersClient.service(servicePath),
   servicePath,
 });

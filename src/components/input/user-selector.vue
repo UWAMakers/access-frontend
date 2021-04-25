@@ -82,6 +82,10 @@ export default {
       type: String,
       default: 'Users',
     },
+    excludeIds: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -96,7 +100,7 @@ export default {
       const reg = searchRegex(this.search ?? '');
       return User.findInStore({
         query: {
-          _id: { $nin: this.value },
+          _id: { $nin: [...this.value, ...this.excludeIds] },
           ...(this.search ? {
             $or: [
               { name: reg },

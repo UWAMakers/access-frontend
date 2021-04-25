@@ -3,31 +3,17 @@
     <v-navigation-drawer width="300" permanent app clipped>
       <v-list-item>
         <v-list-item-icon class="mr-2">
-          <v-icon>mdi-wrench</v-icon>
+          <v-icon>mdi-school-outline</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title class="title">
-            Training Config
+            Training
           </v-list-item-title>
         </v-list-item-content>
-        <v-list-item-icon class="ml-2">
-          <training-add>
-            <template #activator="{ on: onAdd }">
-              <v-tooltip right>
-                <template #activator="{ on: onTooltip }">
-                  <v-btn icon small v-on="{ ...onAdd, ...onTooltip }">
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
-                </template>
-                <span>Add New Config</span>
-              </v-tooltip>
-            </template>
-          </training-add>
-        </v-list-item-icon>
       </v-list-item>
       <v-list-item>
         <v-list-item-icon class="mr-2">
-          <v-icon>mdi-database-search</v-icon>
+          <v-icon>mdi-magnify</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
           <v-text-field
@@ -45,11 +31,24 @@
       <v-virtual-scroll
         :items="configs"
         height="calc(100% - 60px - 64px - 1px)"
-        item-height="49"
+        item-height="56"
         bench="1"
       >
         <template v-slot:default="{ item }">
-          <v-list-item :key="item._id" :to="`/training-config/${item._id}`">
+          <v-list-item :key="item._id" :to="`/training/${item._id}`">
+            <v-list-item-icon class="mr-4">
+              <v-tooltip right>
+                <template #activator="{ on }">
+                  <v-icon
+                    :color="itemStatus(item).color"
+                    v-on="on"
+                  >
+                    {{ itemStatus(item).icon }}
+                  </v-icon>
+                </template>
+                <span>{{itemStatus(item).text}}</span>
+              </v-tooltip>
+            </v-list-item-icon>
             <v-list-item-title>
               {{item.name}}
             </v-list-item-title>
@@ -59,19 +58,17 @@
         </template>
       </v-virtual-scroll>
     </v-navigation-drawer>
-    <training-edit :id="configId" />
+    <training-view :id="configId" />
   </div>
 </template>
 
 <script>
-import TrainingEdit from '@/components/trainings/edit.vue';
-import TrainingAdd from '@/components/trainings/add.vue';
+import TrainingView from '@/components/trainings/view.vue';
 import searchRegex from '@/util/search-regex';
 
 export default {
   components: {
-    TrainingEdit,
-    TrainingAdd,
+    TrainingView,
   },
   data() {
     return {
@@ -103,8 +100,9 @@ export default {
   },
   methods: {
     async loadConfigs() {
-      const { Training } = this.$FeathersVuex.api;
+      const { Training, Completion } = this.$FeathersVuex.api;
       const existingIds = Training.findInStore().data.map((u) => u._id);
+      const existingCompIds = Completion.findInStore().data.map((u) => u._id);
       this.loading = true;
       try {
         await Training.find({
@@ -113,10 +111,21 @@ export default {
           },
           paginate: false,
         });
+        await Completion.find({
+          query: {
+            _id: { $nin: existingCompIds },
+          },
+          paginate: false,
+        });
       } catch (err) {
-        this.$handleError(err, 'loading training configs');
+        this.$handleError(err, 'loading training');
       }
       this.loading = false;
+    },
+    itemStatus(item) {
+      if (item.isLocked()) return { text: 'Locked (You must complete other training first)', icon: 'mdi-lock-outline' };
+      if (item.completion?.()?.status === 'complete') return { text: 'Completed', color: 'success', icon: 'mdi-check-circle-outline' };
+      return { text: 'Pending Completion', color: 'warning', icon: 'mdi-minus-circle-outline' };
     },
   },
 };

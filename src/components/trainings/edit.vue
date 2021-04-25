@@ -23,6 +23,8 @@
           <v-textarea
             v-model.trim="config.desc"
             label="Description"
+            hint="Markdown supported"
+            rows="7"
             outlined
           />
         </v-card-text>
@@ -37,6 +39,17 @@
           </primary-btn>
         </v-card-actions>
       </v-card>
+      <v-card class="mt-4" outlined>
+        <v-card-text class="pb-0">
+          <i>Preview</i>
+        </v-card-text>
+        <v-card-title>
+          {{config.name}}
+        </v-card-title>
+        <v-card-text>
+          <div v-html="fromMd(config.desc)" />
+        </v-card-text>
+      </v-card>
     </v-col>
     <v-col v-show="id" cols="12" md="6">
       <training-items v-model="config.itemIds" @input="configAction('patch-items')" />
@@ -45,6 +58,7 @@
 </template>
 
 <script>
+import { fromMd } from '@/util/markdown';
 import TrainingItems from '@/components/trainings/items.vue';
 
 export default {
@@ -54,7 +68,7 @@ export default {
   props: {
     id: {
       type: String,
-      required: true,
+      default: '',
     },
   },
   data() {
@@ -83,7 +97,9 @@ export default {
     },
   },
   methods: {
+    fromMd,
     async loadConfig() {
+      if (!this.id) return;
       const { Training } = this.$FeathersVuex.api;
       let config;
       this.loading = true;

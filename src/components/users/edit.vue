@@ -41,7 +41,7 @@
         <v-select
           v-model="user.roles"
           :items="roles"
-          :disabled="!isSuperAdmin"
+          :disabled="!$isSuperAdmin"
           label="Roles"
           multiple
           outlined
@@ -93,9 +93,6 @@ export default {
     };
   },
   computed: {
-    isSuperAdmin() {
-      return this.$user.roles.includes('super_admin');
-    },
     roles() {
       return [
         { text: 'Admin', value: 'admin' },

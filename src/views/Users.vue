@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer permanent app clipped>
+    <v-navigation-drawer width="300" permanent app clipped>
       <v-list-item>
         <v-list-item-icon class="mr-2">
           <v-icon>mdi-account-circle</v-icon>
