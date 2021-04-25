@@ -35,7 +35,7 @@ export default {
     toggleDialog(isOpen) {
       this.openDialog = isOpen;
     },
-    async cancelFn() {
+    cancelFn() {
       console.log('cancelling');
       this.$router.push('/logout');
     },
