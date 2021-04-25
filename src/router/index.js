@@ -4,6 +4,8 @@ import store from '@/store';
 import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
 import Feedback from '../views/Feedback.vue';
+import Training from '../views/Training.vue';
+import Induction from '../views/Induction.vue';
 
 Vue.use(VueRouter);
 
@@ -35,6 +37,16 @@ const routes = [
     path: '/bug-report',
     name: 'Bug Report',
     component: Feedback,
+  },
+  {
+    path: '/training/:id?',
+    name: 'Training',
+    component: Training,
+  },
+  {
+    path: '/induction/:id?',
+    name: 'Induction',
+    component: Induction,
   },
 ];
 

@@ -29,6 +29,15 @@
     </v-col>
     <v-col cols="12" class="py-0">
       <v-text-field
+        v-show="visibleFields.includes('checklistUrl')"
+        v-model.trim="item.checklistUrl"
+        label="Induction Checklist URL"
+        outlined
+        dense
+      />
+    </v-col>
+    <v-col cols="12" class="py-0">
+      <v-text-field
         v-show="visibleFields.includes('csvUrl')"
         v-model.trim="item.csvUrl"
         label="Results CSV URL"
@@ -130,7 +139,7 @@ export default {
         case 'quiz':
           return ['url', 'csvUrl', 'requiredScore', 'expiry', 'required'];
         case 'induction':
-          return ['url', 'expiry', 'required', 'inductorIds'];
+          return ['url', 'checklistUrl', 'expiry', 'required', 'inductorIds'];
         case 'completion':
           return ['required', 'trainingId'];
         default:
@@ -142,7 +151,7 @@ export default {
         case 'quiz':
           return 'Google Quiz URL';
         case 'induction':
-          return 'Induction Checklist URL';
+          return 'Schedule Induction URL';
         default:
           return 'URL';
       }

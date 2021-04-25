@@ -51,7 +51,7 @@ export default {
       types: [
         { text: 'Comment', value: 'comment' },
         { text: 'Google Quiz', value: 'quiz' },
-        { text: 'Other Training', value: 'completion' },
+        { text: 'Required Training', value: 'completion' },
         { text: 'In-Person Induction', value: 'induction' },
       ],
     };
