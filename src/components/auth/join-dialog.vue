@@ -6,12 +6,10 @@
       :cancelFn="cancelFn"
       :confirmFn="confirmFn"
       titleText="Join Makers?"
+      persistent="persistent"
       bodyText="Joining makers will add you to our mailing list
        and allow you to participate in inductions."
     />
-    <v-btn @click="unjoin">
-      Unjoin
-    </v-btn>
   </div>
 </template>
 
@@ -29,7 +27,6 @@ export default {
   }),
   mounted() {
     this.openDialog = !this.$user?.preferences?.joinedAt;
-    console.log(this.$user);
   },
   methods: {
     toggleDialog(isOpen) {
@@ -37,17 +34,12 @@ export default {
     },
     cancelFn() {
       this.$store.dispatch('auth/logout').then(() => {
-        this.$router.push('login');
+        this.$router.push('/login');
       });
-    },
-    async unjoin() {
-      this.$user.preferences.joinedAt = null;
-      await this.$user.save();
     },
     async confirmFn() {
       try {
         this.$user.preferences.joinedAt = new Date();
-        this.$user.preferences.rhee = 'yes';
         await this.$user.save();
         this.$success('joined makers');
       } catch (err) {

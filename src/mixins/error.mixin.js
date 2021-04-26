@@ -21,7 +21,7 @@ export default {
       console.error(error);
       this.$store.commit('showSnackbar', {
         timeout: 10000,
-        text: `Something when wrong with ${action}.`,
+        text: `Something went wrong with ${action}.`,
         severity: 'error',
         errorReport: errMsg(error, action, window.location.href, this.$user),
       });
