@@ -44,7 +44,7 @@ const routes = [
     component: Training,
   },
   {
-    path: '/induction/:id?',
+    path: '/induction/:key?',
     name: 'Induction',
     component: Induction,
   },

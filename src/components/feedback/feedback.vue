@@ -16,7 +16,7 @@
       />
     </v-card-text>
     <v-card-actions>
-      <primary-button v-show="showErrorTest" @click="testError">Brew Coffee</primary-button>
+      <primary-button v-show="$isDev" @click="testError">Brew Coffee</primary-button>
       <v-spacer />
       <primary-button
         :loading="loading"
@@ -38,11 +38,6 @@ export default {
     msg: '',
     loading: false,
   }),
-  computed: {
-    showErrorTest() {
-      return process.env.NODE_ENV !== 'production';
-    },
-  },
   methods: {
     ...mapMutations(['showSnackbar', 'closeSnackbar']),
     async submit() {
