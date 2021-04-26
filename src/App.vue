@@ -3,7 +3,6 @@
     <nav-bar v-if="showNav" />
     <v-main>
       <global-snackbar />
-      <join-dialog />
       <router-view />
     </v-main>
   </v-app>
@@ -11,14 +10,12 @@
 
 <script>
 import NavBar from './components/nav/nav-bar.vue';
-import JoinDialog from './components/auth/join-dialog.vue';
 
 export default {
   name: 'App',
 
   components: {
     NavBar,
-    JoinDialog,
   },
   computed: {
     showNav() {

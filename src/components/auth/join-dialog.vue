@@ -10,9 +10,6 @@
       bodyText="Joining makers will add you to our mailing list
        and allow you to participate in inductions."
     />
-    <v-btn @click="unjoin">
-      Unjoin
-    </v-btn>
   </div>
 </template>
 
@@ -36,17 +33,13 @@ export default {
       this.openDialog = isOpen;
     },
     cancelFn() {
-      console.log('cancelling');
-      this.$router.push('/logout');
-    },
-    async unjoin() {
-      this.$user.preferences.joinedAt = null;
-      await this.$user.save();
+      this.$store.dispatch('auth/logout').then(() => {
+        this.$router.push('/login');
+      });
     },
     async confirmFn() {
       try {
         this.$user.preferences.joinedAt = new Date();
-        this.$user.preferences.rhee = 'yes';
         await this.$user.save();
         this.$success('joined makers');
       } catch (err) {

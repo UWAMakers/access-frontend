@@ -13,10 +13,12 @@
     <div>
       <avatar-menu />
     </div>
+    <join-dialog />
   </v-app-bar>
 </template>
 
 <script>
+import JoinDialog from '@/components/auth/join-dialog.vue';
 import DarkModeIcon from './dark-mode-icon.vue';
 import AvatarMenu from './avatar-menu.vue';
 
@@ -24,6 +26,7 @@ export default {
   components: {
     DarkModeIcon,
     AvatarMenu,
+    JoinDialog,
   },
   data: () => ({}),
   methods: {},
