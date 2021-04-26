@@ -142,6 +142,8 @@ export default {
           return ['url', 'checklistUrl', 'expiry', 'required', 'inductorIds'];
         case 'completion':
           return ['required', 'trainingId'];
+        case 'review':
+          return ['required', 'url', 'expiry'];
         default:
           return ['url'];
       }
@@ -152,6 +154,8 @@ export default {
           return 'Google Quiz URL';
         case 'induction':
           return 'Schedule Induction URL';
+        case 'review':
+          return 'Document URL';
         default:
           return 'URL';
       }

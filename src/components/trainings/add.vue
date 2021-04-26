@@ -66,6 +66,7 @@ export default {
       item: {},
       types: [
         { text: 'Comment', value: 'comment' },
+        { text: 'Review Document', value: 'review' },
         { text: 'Google Quiz', value: 'quiz' },
         { text: 'Other Training', value: 'completion' },
         { text: 'In-Person Induction', value: 'induction' },

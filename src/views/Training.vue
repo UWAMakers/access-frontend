@@ -100,9 +100,10 @@ export default {
   },
   methods: {
     async loadConfigs() {
-      const { Training, Completion } = this.$FeathersVuex.api;
+      const { Training, Completion, Review } = this.$FeathersVuex.api;
       const existingIds = Training.findInStore().data.map((u) => u._id);
       const existingCompIds = Completion.findInStore().data.map((u) => u._id);
+      const existingReviewIds = Review.findInStore().data.map((r) => r._id);
       this.loading = true;
       try {
         await Training.find({
@@ -114,6 +115,14 @@ export default {
         await Completion.find({
           query: {
             _id: { $nin: existingCompIds },
+            userId: this.$user._id,
+          },
+          paginate: false,
+        });
+        await Review.find({
+          query: {
+            _id: { $nin: existingReviewIds },
+            userId: this.$user._id,
           },
           paginate: false,
         });

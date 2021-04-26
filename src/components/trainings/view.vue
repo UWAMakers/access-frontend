@@ -27,9 +27,9 @@
             <v-divider :key="`divider-${item._id}`" />
             <v-list-item
               :key="`item-${item._id}`"
-              :href="item.url || undefined"
-              :to="item.trainingId || undefined"
-              :target="!item.trainingId ? '_blank' : ''"
+              :href="/^http/.test(itemUrl(item)) ? itemUrl(item) : undefined"
+              :to="!/^http/.test(itemUrl(item)) ? itemUrl(item) : undefined"
+              :target="/^http/.test(itemUrl(item)) ? '_blank' : ''"
             >
               <v-list-item-icon class="mr-2">
                 <v-icon v-if="itemStatus(item)" color="success">mdi-check-circle-outline</v-icon>
@@ -50,14 +50,17 @@
                   </v-list-item-content>
                 </template>
                 <div>
-                  {{item.name}}<br>
+                  <strong>{{item.name}}</strong>
+                  <br>
                   {{item.desc}}
                 </div>
               </v-tooltip>
               <v-list-item-action v-show="(item.trainingId || item.url)">
                 <primary-btn small>
                   {{btnText(item)}}
-                  <v-icon v-show="!item.trainingId" right x-small>mdi-open-in-new</v-icon>
+                  <v-icon v-show="/^http/.test(itemUrl(item))" right x-small>
+                    mdi-open-in-new
+                  </v-icon>
                 </primary-btn>
               </v-list-item-action>
             </v-list-item>
@@ -134,14 +137,30 @@ export default {
           return 'Schedule';
         case 'completion':
           return 'View Training';
+        case 'review':
+          return 'Review';
         default:
           return 'Open';
+      }
+    },
+    itemUrl(item) {
+      switch (item.type) {
+        case 'quiz':
+        case 'induction':
+        case 'comment':
+          return item.url;
+        case 'completion':
+          return `/training/${item.trainingId}`;
+        case 'review':
+          return `/review/${item._id}`;
+        default:
+          return undefined;
       }
     },
     itemStatus(item) {
       const { Completion } = this.$FeathersVuex.api;
       const res = (val) => (!val && !item.required ? null : !!val);
-      if (item.type === 'induction') {
+      if (['induction', 'review'].includes(item.type)) {
         return res(this.config?.completion?.()?.items?.some((i) => i.itemId === item._id
           && (!i.expiresAt || (new Date(i.expiresAt)).getTime() >= Date.now())
           && i.confirmed));
