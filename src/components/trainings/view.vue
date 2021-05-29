@@ -163,7 +163,7 @@ export default {
       if (['induction', 'review'].includes(item.type)) {
         return res(this.config?.completion?.()?.items?.some((i) => i.itemId === item._id
           && (!i.expiresAt || (new Date(i.expiresAt)).getTime() >= Date.now())
-          && i.confirmed));
+          && i.confirmedAt));
       }
       if (item.type === 'quiz') {
         return res(this.config?.completion?.()?.items?.some((i) => i.itemId === item._id
