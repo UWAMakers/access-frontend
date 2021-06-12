@@ -73,6 +73,7 @@
 
 <script>
 import { fromMd } from '@/util/markdown';
+import dayjs from 'dayjs';
 
 export default {
   props: {
@@ -157,29 +158,36 @@ export default {
           return undefined;
       }
     },
+    getCompItem(item) {
+      return this.config?.completion?.()?.items?.find((compItem) => compItem.itemId === item._id);
+    },
+    getExpiry(item) {
+      const compItem = this.getCompItem(item);
+      return compItem?.confirmedAt && item.expiry ? dayjs(compItem.confirmedAt).add(item.expiry, 'w') : null;
+    },
     itemStatus(item) {
-      const { Completion } = this.$FeathersVuex.api;
+      if (item.type === 'comment') return null;
       const res = (val) => (!val && !item.required ? null : !!val);
+      const compItem = this.getCompItem(item);
+      if (!compItem) return res(false);
+      const expiry = this.getExpiry(item);
+      const validExpiry = !expiry || expiry.valueOf() > Date.now();
       if (['induction', 'review'].includes(item.type)) {
-        return res(this.config?.completion?.()?.items?.some((i) => i.itemId === item._id
-          && (!i.expiresAt || (new Date(i.expiresAt)).getTime() >= Date.now())
-          && i.confirmedAt));
+        return res(compItem.confirmedAt && validExpiry);
       }
       if (item.type === 'quiz') {
-        return res(this.config?.completion?.()?.items?.some((i) => i.itemId === item._id
-          && (!i.expiresAt || (new Date(i.expiresAt)).getTime() >= Date.now())
-          && i.score >= (item.requiredScore ?? 0.5)));
+        return res(
+          compItem.confirmedAt
+          && validExpiry
+          && compItem.score >= (item.requiredScore ?? 0.5),
+        );
       }
       if (item.type === 'completion') {
-        const { total } = Completion.findInStore({
-          query: {
-            trainingId: item.trainingId,
-            userId: this.$user._id,
-            status: 'complete',
-            $limit: 0,
-          },
-        });
-        return res(total);
+        return res(
+          compItem.confirmedAt
+          && validExpiry
+          && compItem.status === 'complete',
+        );
       }
       return null;
     },

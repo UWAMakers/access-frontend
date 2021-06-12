@@ -13,7 +13,7 @@ class Training extends BaseModel {
         const { total } = models.api.Completion.findInStore({
           query: {
             trainingId: { $in: this.parentIds },
-            userId: store.getters['auth/user']._id,
+            userId: store.getters['auth/user']?._id,
             status: 'complete',
             $limit: 0,
           },
@@ -24,7 +24,7 @@ class Training extends BaseModel {
         const { data: comps } = models.api.Completion.findInStore({
           query: {
             trainingId: this._id,
-            userId: store.getters['auth/user']._id,
+            userId: store.getters['auth/user']?._id,
           },
         });
         return comps[0];

@@ -3,7 +3,6 @@ import marked from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
 export const toMd = (value = '') => {
-  if (!process.client) return '';
   const turndownService = new window.TurndownService({
     headingStyle: 'atx',
   });

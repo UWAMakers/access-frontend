@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import sortBy from 'lodash/sortBy';
 import TrainingView from '@/components/trainings/view.vue';
 import searchRegex from '@/util/search-regex';
 
@@ -80,7 +81,7 @@ export default {
     configs() {
       const { Training } = this.$FeathersVuex.api;
       const reg = searchRegex(this.search);
-      return Training.findInStore({
+      return sortBy(Training.findInStore({
         query: {
           ...(this.search ? {
             $or: [
@@ -89,7 +90,7 @@ export default {
           } : {}),
           $sort: { name: 1 },
         },
-      }).data;
+      }).data, [(v) => v.isLocked(), (v) => v.name?.toLowerCase()]);
     },
     configId() {
       return this.$route.params.id;

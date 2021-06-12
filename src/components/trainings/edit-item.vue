@@ -74,7 +74,6 @@
       <v-text-field
         v-show="visibleFields.includes('requiredScore')"
         :value="item.requiredScore * 100"
-        v-model.number="item.requiredScore"
         label="Required Quiz Score"
         hint="Percentage (0-100%)"
         type="number"
