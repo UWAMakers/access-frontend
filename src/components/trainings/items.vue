@@ -50,6 +50,7 @@ export default {
       loading: false,
       types: [
         { text: 'Comment', value: 'comment' },
+        { text: 'Review Document', value: 'review' },
         { text: 'Google Quiz', value: 'quiz' },
         { text: 'Required Training', value: 'completion' },
         { text: 'In-Person Induction', value: 'induction' },

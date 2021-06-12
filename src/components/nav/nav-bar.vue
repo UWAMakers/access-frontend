@@ -5,6 +5,7 @@
       <v-btn to="/" color="accent" text class="mx-1">Home</v-btn>
       <v-btn to="/training" color="accent" text class="mx-1">Training</v-btn>
       <v-btn to="/cards" color="accent" text class="mx-1">Cards</v-btn>
+      <v-btn v-show="showInduction" to="/induction" color="accent" text class="mx-1">Induct</v-btn>
     </div>
     <v-spacer></v-spacer>
     <div>
@@ -28,7 +29,34 @@ export default {
     AvatarMenu,
     JoinDialog,
   },
-  data: () => ({}),
-  methods: {},
+  data() {
+    return {
+      showInduction: false,
+    };
+  },
+  async mounted() {
+    await this.loadInductionVisibility();
+  },
+  methods: {
+    async loadInductionVisibility() {
+      const { TrainingItem } = this.$FeathersVuex.api;
+      if (this.$isAdmin) {
+        this.showInduction = true;
+        return;
+      }
+      try {
+        const { total } = await TrainingItem.find({
+          query: {
+            type: 'induction',
+            inductorIds: this.$user._id,
+            $limit: 0,
+          },
+        });
+        this.showInduction = !!total;
+      } catch (err) {
+        this.$handleError(err, 'initialising the menu');
+      }
+    },
+  },
 };
 </script>

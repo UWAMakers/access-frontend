@@ -6,6 +6,7 @@ import Login from '../views/Login.vue';
 import Feedback from '../views/Feedback.vue';
 import Training from '../views/Training.vue';
 import Induction from '../views/Induction.vue';
+import Review from '../views/Review.vue';
 
 Vue.use(VueRouter);
 
@@ -47,6 +48,11 @@ const routes = [
     path: '/induction/:key?',
     name: 'Induction',
     component: Induction,
+  },
+  {
+    path: '/review/:id',
+    name: 'Review',
+    component: Review,
   },
 ];
 

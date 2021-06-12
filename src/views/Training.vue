@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import sortBy from 'lodash/sortBy';
 import TrainingView from '@/components/trainings/view.vue';
 import searchRegex from '@/util/search-regex';
 
@@ -80,7 +81,7 @@ export default {
     configs() {
       const { Training } = this.$FeathersVuex.api;
       const reg = searchRegex(this.search);
-      return Training.findInStore({
+      return sortBy(Training.findInStore({
         query: {
           ...(this.search ? {
             $or: [
@@ -89,7 +90,7 @@ export default {
           } : {}),
           $sort: { name: 1 },
         },
-      }).data;
+      }).data, [(v) => v.isLocked(), (v) => v.name?.toLowerCase()]);
     },
     configId() {
       return this.$route.params.id;
@@ -100,9 +101,10 @@ export default {
   },
   methods: {
     async loadConfigs() {
-      const { Training, Completion } = this.$FeathersVuex.api;
+      const { Training, Completion, Review } = this.$FeathersVuex.api;
       const existingIds = Training.findInStore().data.map((u) => u._id);
       const existingCompIds = Completion.findInStore().data.map((u) => u._id);
+      const existingReviewIds = Review.findInStore().data.map((r) => r._id);
       this.loading = true;
       try {
         await Training.find({
@@ -114,6 +116,14 @@ export default {
         await Completion.find({
           query: {
             _id: { $nin: existingCompIds },
+            userId: this.$user._id,
+          },
+          paginate: false,
+        });
+        await Review.find({
+          query: {
+            _id: { $nin: existingReviewIds },
+            userId: this.$user._id,
           },
           paginate: false,
         });
