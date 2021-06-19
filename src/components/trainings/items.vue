@@ -14,6 +14,11 @@
       >
         <v-expansion-panel-header>
           <v-row align="center" class="pl-2 pr-4">
+            <item-mover
+              :items="value"
+              :item="item._id"
+              @update:items="$emit('input', $event)"
+            />
             <strong>{{item.name}}</strong>
             <v-spacer />
             <v-chip small class="mr-2">
@@ -33,11 +38,13 @@
 <script>
 import TrainingAdd from '@/components/trainings/add.vue';
 import EditItem from '@/components/trainings/edit-item.vue';
+import ItemMover from '@/components/input/item-mover.vue';
 
 export default {
   components: {
     TrainingAdd,
     EditItem,
+    ItemMover,
   },
   props: {
     value: {

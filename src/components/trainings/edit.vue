@@ -13,6 +13,9 @@
           Edit Training Config
           <v-spacer />
           <delete-dialog :name="config.name" @delete="configAction('delete')" />
+          <v-btn icon :to="`/training/${config._id}`">
+            <v-icon>mdi-eye</v-icon>
+          </v-btn>
         </v-card-title>
         <v-card-text>
           <v-text-field
@@ -128,6 +131,7 @@ export default {
             this.$success('removed training config');
             break;
           default:
+            delete this.config.order;
             await this.config.save();
             this.$success('saved training config');
             await this.loadConfig();

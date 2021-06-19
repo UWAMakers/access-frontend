@@ -48,12 +48,31 @@
       </v-virtual-scroll>
     </v-navigation-drawer>
     <v-row class="pa-4">
-      <v-col cols="12">
+      <v-col cols="12" lg="6">
         <user-edit v-if="userId" :id="userId" />
         <v-card v-else outlined>
           <v-card-text>
             No user selected, select one to get editing.
           </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col v-if="user" cols="12" sm="6" lg="3">
+        <v-card outlined>
+          <training-list
+            v-model="trainingId"
+            :user="user"
+            height="400px"
+          />
+        </v-card>
+      </v-col>
+      <v-col v-if="trainingId" cols="12" sm="6" lg="3">
+        <v-card outlined>
+          <v-card-title>Training Progress</v-card-title>
+          <view-items
+            :id="trainingId"
+            :user="user"
+            readonly
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -63,17 +82,22 @@
 <script>
 import UserAvatar from '@/components/users/avatar.vue';
 import UserEdit from '@/components/users/edit.vue';
+import TrainingList from '@/components/trainings/list.vue';
+import ViewItems from '@/components/trainings/view-items.vue';
 import searchRegex from '@/util/search-regex';
 
 export default {
   components: {
     UserAvatar,
     UserEdit,
+    TrainingList,
+    ViewItems,
   },
   data() {
     return {
       search: '',
       loading: true,
+      trainingId: null,
     };
   },
   computed: {
@@ -100,19 +124,29 @@ export default {
     userId() {
       return this.$route.params.id;
     },
+    user() {
+      return this.users.find((u) => u._id === this.userId);
+    },
   },
   async mounted() {
     await this.loadUsers();
   },
   methods: {
     async loadUsers() {
-      const { User } = this.$FeathersVuex.api;
+      const { User, Training } = this.$FeathersVuex.api;
       const existingIds = User.findInStore().data.map((u) => u._id);
+      const existingTrainIds = Training.findInStore().data.map((u) => u._id);
       this.loading = true;
       try {
         await User.find({
           query: {
             _id: { $nin: existingIds },
+          },
+          paginate: false,
+        });
+        await Training.find({
+          query: {
+            _id: { $nin: existingTrainIds },
           },
           paginate: false,
         });
