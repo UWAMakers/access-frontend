@@ -50,6 +50,9 @@
       >
         <template v-slot:default="{ item }">
           <v-list-item :key="item._id" :to="`/training-config/${item._id}`">
+            <v-list-item-action class="my-0">
+              <item-mover :items="configs" :item="item" @update:items="updateOrder" />
+            </v-list-item-action>
             <v-list-item-title>
               {{item.name}}
             </v-list-item-title>
@@ -64,35 +67,39 @@
 </template>
 
 <script>
+import debouncePromise from 'debounce-promise';
+import sortBy from 'lodash/sortBy';
 import TrainingEdit from '@/components/trainings/edit.vue';
 import TrainingAdd from '@/components/trainings/add.vue';
+import ItemMover from '@/components/input/item-mover.vue';
 import searchRegex from '@/util/search-regex';
 
 export default {
   components: {
     TrainingEdit,
     TrainingAdd,
+    ItemMover,
   },
   data() {
     return {
       search: '',
       loading: true,
+      stagedItems: [],
     };
   },
   computed: {
     configs() {
       const { Training } = this.$FeathersVuex.api;
       const reg = searchRegex(this.search);
-      return Training.findInStore({
+      return sortBy(Training.findInStore({
         query: {
           ...(this.search ? {
             $or: [
               { name: reg },
             ],
           } : {}),
-          $sort: { name: 1 },
         },
-      }).data;
+      }).data, ['order', (v) => v.name.toLowerCase()]);
     },
     configId() {
       return this.$route.params.id;
@@ -118,6 +125,28 @@ export default {
       }
       this.loading = false;
     },
+    updateOrder(items) {
+      items.forEach((item, i) => {
+        if (item.order !== i) {
+          this.$set(item, 'order', i);
+          if (!this.stagedItems.some(({ _id }) => _id === item._id)) {
+            this.stagedItems.push(item);
+          }
+        }
+      });
+      this.saveOrder();
+    },
+    // eslint-disable-next-line func-names
+    saveOrder: debouncePromise(async function () {
+      try {
+        await Promise.all(this.stagedItems.map(async (item) => {
+          await this.$store.dispatch('trainings/patch', [item._id, { order: item.order }]);
+        }));
+        this.stagedItems = [];
+      } catch (err) {
+        this.$handleError(err, 'saving training order');
+      }
+    }, 1000),
   },
 };
 </script>
