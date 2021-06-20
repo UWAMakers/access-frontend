@@ -56,6 +56,7 @@
     </v-col>
     <v-col v-show="id" cols="12" md="6">
       <training-items v-model="config.itemIds" @input="configAction('patch-items')" />
+      <training-stats :training-id="id" class="mt-4" />
     </v-col>
   </v-row>
 </template>
@@ -63,10 +64,12 @@
 <script>
 import { fromMd } from '@/util/markdown';
 import TrainingItems from '@/components/trainings/items.vue';
+import TrainingStats from '@/components/trainings/stats.vue';
 
 export default {
   components: {
     TrainingItems,
+    TrainingStats,
   },
   props: {
     id: {
