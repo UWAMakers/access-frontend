@@ -38,7 +38,7 @@
                 </v-icon>
                 <v-icon v-else-if="item.type !== 'comment'">mdi-circle-outline</v-icon>
               </v-list-item-icon>
-              <v-tooltip top>
+              <v-tooltip top open-delay="150">
                 <template #activator="{ on }">
                   <v-list-item-content v-on="on">
                     <v-list-item-title>
