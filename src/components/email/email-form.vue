@@ -80,6 +80,26 @@
           >
           </v-select>
         </v-col>
+        <v-col cols="4" v-show="showSchedule">
+          <v-autocomplete
+            multiple
+            :rules="[required]"
+            label="Days of the week"
+            :items="daysOfWeek"
+            v-model="form.sendDays"
+          >
+          </v-autocomplete>
+        </v-col>
+        <v-col cols="4" v-show="showSchedule">
+          <v-autocomplete
+            multiple
+            :rules="[required]"
+            label="Hours of the day"
+            :items="hoursOfDay"
+            v-model="form.sendHours"
+          >
+          </v-autocomplete>
+        </v-col>
       </v-row>
     </v-form>
   </v-container>
@@ -102,13 +122,23 @@ export default {
       name: '',
       event: '',
       sendPolicy: '',
+      sendDays: [],
+      sendHours: [],
     },
+    daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    // 0 - 23
+    hoursOfDay: [...Array(24).keys()],
     required: (v) => !!v || 'Required',
     requiredArray: (v) => !!v.length || 'Required',
     validEmail,
     events: ['Fraser wakes up before midday', 'Eddie understands React'],
-    emailSendOptions: ['Immediately-ish', 'Every'],
+    emailSendOptions: ['Immediately-ish', 'On a schedule'],
   }),
+  computed: {
+    showSchedule() {
+      return this.form.sendPolicy === 'On a schedule';
+    },
+  },
   methods: {
     onTemplateChange(value) {
       this.compiledMarkdown = value;
