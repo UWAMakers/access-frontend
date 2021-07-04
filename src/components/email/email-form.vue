@@ -80,20 +80,20 @@
           >
           </v-select>
         </v-col>
-        <v-col cols="4" v-show="showSchedule">
+        <v-col cols="4" v-if="showSchedule">
           <v-autocomplete
             multiple
-            :rules="[required]"
+            :rules="[requiredArray]"
             label="Days of the week"
             :items="daysOfWeek"
             v-model="form.sendDays"
           >
           </v-autocomplete>
         </v-col>
-        <v-col cols="4" v-show="showSchedule">
+        <v-col cols="4" v-if="showSchedule">
           <v-autocomplete
             multiple
-            :rules="[required]"
+            :rules="[requiredArray]"
             label="Hours of the day"
             :items="hoursOfDay"
             v-model="form.sendHours"

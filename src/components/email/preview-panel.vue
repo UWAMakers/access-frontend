@@ -56,12 +56,37 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="6">
-        <v-textarea v-model="input" filled multiline @input="onChange()">
+        <v-textarea
+          v-model="input"
+          rounded
+          filled
+          multiline
+          rows="15"
+          @input="onChange()"
+        >
         </v-textarea>
       </v-col>
       <v-divider vertical></v-divider>
-      <v-col>
-        <div v-html="compiledMarkdown" />
+      <v-col cols="6">
+        <div v-html="outputHtml" />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="3">
+        <v-text-field
+          @input="onChange()"
+          v-model="ctaText"
+          label="Call to action text"
+        >
+        </v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field
+          v-model="ctaLink"
+          @input="onChange()"
+          label="Call to action link"
+        >
+        </v-text-field>
       </v-col>
     </v-row>
   </v-container>
@@ -70,22 +95,28 @@
 <script>
 import marked from 'marked';
 import domPurify from 'dompurify';
+import createTemplate from './templates/standard';
+
+const defaultCtaText = 'Go to Access';
+const defaultCtaLink = 'http://access.uwamakers.com';
 
 export default {
   data: () => ({
     input: '',
+    ctaText: defaultCtaText,
+    ctaLink: defaultCtaLink,
+    outputHtml: createTemplate('', defaultCtaText, defaultCtaLink),
   }),
   methods: {
     onChange() {
       // Prevent yucky XSS
       const sanitizedHtml = domPurify.sanitize(marked(this.input));
-      this.$emit('input', sanitizedHtml);
+      console.log(this.ctaText);
+      this.outputHtml = createTemplate(sanitizedHtml, this.ctaText, this.ctaLink);
+      this.$emit('input', this.outputHtml);
     },
   },
   computed: {
-    compiledMarkdown() {
-      return marked(this.input);
-    },
   },
   components: {},
 };
