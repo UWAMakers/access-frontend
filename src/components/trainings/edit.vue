@@ -13,6 +13,9 @@
           Edit Training Config
           <v-spacer />
           <delete-dialog :name="config.name" @delete="configAction('delete')" />
+          <v-btn icon :to="`/training/${config._id}`">
+            <v-icon>mdi-eye</v-icon>
+          </v-btn>
         </v-card-title>
         <v-card-text>
           <v-text-field
@@ -53,6 +56,7 @@
     </v-col>
     <v-col v-show="id" cols="12" md="6">
       <training-items v-model="config.itemIds" @input="configAction('patch-items')" />
+      <training-stats :training-id="id" class="mt-4" />
     </v-col>
   </v-row>
 </template>
@@ -60,10 +64,12 @@
 <script>
 import { fromMd } from '@/util/markdown';
 import TrainingItems from '@/components/trainings/items.vue';
+import TrainingStats from '@/components/trainings/stats.vue';
 
 export default {
   components: {
     TrainingItems,
+    TrainingStats,
   },
   props: {
     id: {
@@ -128,6 +134,7 @@ export default {
             this.$success('removed training config');
             break;
           default:
+            delete this.config.order;
             await this.config.save();
             this.$success('saved training config');
             await this.loadConfig();

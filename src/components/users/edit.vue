@@ -96,7 +96,7 @@ export default {
     roles() {
       return [
         { text: 'Admin', value: 'admin' },
-        { text: 'Super Admin', value: 'super_admin', disabled: this.$user._id === this.id },
+        { text: 'Super Admin', value: 'super_admin', disabled: this.$user?._id === this.id },
       ];
     },
   },
