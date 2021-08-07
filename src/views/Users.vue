@@ -75,6 +75,16 @@
           />
         </v-card>
       </v-col>
+      <v-col v-if="userId" cols="12" lg="6">
+        <v-card outlined>
+          <v-card-title>
+            Access Log
+            <v-spacer />
+            <access-filter-dialog v-model="logFilter" hide-user-selector />
+          </v-card-title>
+          <access-log :filter="{ userId, ...logFilter }" :exclude-headers="['userId']" />
+        </v-card>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -84,6 +94,8 @@ import UserAvatar from '@/components/users/avatar.vue';
 import UserEdit from '@/components/users/edit.vue';
 import TrainingList from '@/components/trainings/list.vue';
 import ViewItems from '@/components/trainings/view-items.vue';
+import AccessLog from '@/components/access/log.vue';
+import AccessFilterDialog from '@/components/access/filter-dialog.vue';
 import searchRegex from '@/util/search-regex';
 
 export default {
@@ -92,12 +104,15 @@ export default {
     UserEdit,
     TrainingList,
     ViewItems,
+    AccessLog,
+    AccessFilterDialog,
   },
   data() {
     return {
       search: '',
       loading: true,
       trainingId: null,
+      logFilter: {},
     };
   },
   computed: {

@@ -12,19 +12,25 @@
         label="Pheme Number"
         placeholder="12345678"
         outlined
-        @keypress.enter="submit"
+        @keypress.enter="submit()"
       />
       <v-text-field
         v-model="password"
         label="Password"
         type="password"
         outlined
-        @keypress.enter="submit"
+        @keypress.enter="submit()"
       />
     </v-card-text>
     <v-card-actions>
+      <card-reader
+        v-model="isScanning"
+        label="Login w/ Card"
+        ref="scanner"
+        @scan="submit"
+      />
       <v-spacer />
-      <primary-btn :disabled="!username || !password" :loading="loading" @click="submit">
+      <primary-btn :disabled="!username || !password" :loading="loading" @click="submit()">
         Login
       </primary-btn>
     </v-card-actions>
@@ -32,25 +38,33 @@
 </template>
 
 <script>
+import CardReader from '@/components/input/card-reader.vue';
+
 export default {
+  components: {
+    CardReader,
+  },
   data() {
     return {
       username: '',
       password: '',
       loading: false,
+      isScanning: false,
       errMsg: '',
     };
   },
   methods: {
-    async submit() {
-      if (!this.username || !this.password) return;
+    async submit(uuid) {
+      if (!uuid && (!this.username || !this.password)) return;
       this.loading = true;
       this.errMsg = '';
       try {
         await this.$store.dispatch('auth/authenticate', {
           strategy: 'local',
-          username: this.username,
-          password: this.password,
+          ...(uuid ? { uuid } : {
+            username: this.username,
+            password: this.password,
+          }),
         });
         if (this.$route.query.followPath) {
           this.$router.push(this.$route.query.followPath);

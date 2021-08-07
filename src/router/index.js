@@ -7,6 +7,7 @@ import Feedback from '../views/Feedback.vue';
 import Training from '../views/Training.vue';
 import Induction from '../views/Induction.vue';
 import Review from '../views/Review.vue';
+import Cards from '../views/Cards.vue';
 
 Vue.use(VueRouter);
 
@@ -18,13 +19,13 @@ const routes = [
   },
   {
     path: '/users/:id?',
-    name: 'users',
+    name: 'Users',
     component: () => import(/* webpackChunkName: "users" */ '../views/Users.vue'),
     meta: { roles: ['admin', 'super_admin'] },
   },
   {
     path: '/training-config/:id?',
-    name: 'training-config',
+    name: 'Training Config',
     component: () => import(/* webpackChunkName: "training-config" */ '../views/TrainingConfig.vue'),
     meta: { roles: ['admin', 'super_admin'] },
   },
@@ -53,6 +54,11 @@ const routes = [
     path: '/review/:id',
     name: 'Review',
     component: Review,
+  },
+  {
+    path: '/cards',
+    name: 'Cards',
+    component: Cards,
   },
 ];
 
