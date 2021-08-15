@@ -47,9 +47,10 @@ const routes = [
     component: Training,
   },
   {
-    path: '/email',
+    path: '/email/:id?',
     name: 'Email',
     component: Email,
+    meta: { roles: ['admin', 'super_admin'] },
   },
   {
     path: '/induction/:key?',

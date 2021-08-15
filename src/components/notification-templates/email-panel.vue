@@ -7,14 +7,14 @@
     <v-card-text>
       <v-container>
         <v-row>
-          <email-form v-model="form" />
+          <email-form v-model="infoForm" />
         </v-row>
       </v-container>
       <v-row>
         <v-divider class="pa-3"></v-divider>
       </v-row>
       <v-row>
-        <preview-panel v-model="compiledMarkdown" />
+        <preview-panel v-model="bodyForm" />
       </v-row>
     </v-card-text>
     <v-card-actions>
@@ -26,13 +26,15 @@
 
 <script>
 import PrimaryButton from '@/components/global/primary-btn.vue';
-import PreviewPanel from '@/components/email/preview-panel.vue';
-import EmailForm from '@/components/email/email-form.vue';
+import PreviewPanel from '@/components/notification-templates/preview-panel.vue';
+import EmailForm from '@/components/notification-templates/email-form.vue';
 
 export default {
+  props: {},
   data: () => ({
     compiledMarkdown: '',
-    form: {},
+    infoForm: {},
+    bodyForm: {},
   }),
   methods: {
     onTemplateChange(value) {

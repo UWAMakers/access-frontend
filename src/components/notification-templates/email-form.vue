@@ -1,24 +1,29 @@
 <template>
   <v-container>
-    <v-form v-model="form.valid" lazy-validation @input="$emit('input', form)">
+    <v-form v-model="formValid" lazy-validation @input="$emit('input', form)">
       <v-row>
         <v-subheader>Template details</v-subheader>
       </v-row>
       <v-row>
         <v-col cols="4">
-          <v-text-field label="Name" v-model="form.name" outlined>
-          </v-text-field
+          <v-text-field label="Name" v-model="form.name" outlined> </v-text-field
         ></v-col>
         <v-col cols="4">
+          <v-autocomplete :items="events" outlined label="Event" v-model="form.action">
+          </v-autocomplete>
+        </v-col>
+        <v-col cols="4" v-show="showTrainings">
           <v-autocomplete
-            :items="events"
+            :items="trainings"
+            :rules="[required]"
+            item-text="name"
+            item-value="_id"
             outlined
-            label="Event"
-            v-model="form.event"
+            label="Training"
+            v-model="form.trainingId"
           >
           </v-autocomplete>
         </v-col>
-        <v-col cols="4"> </v-col>
       </v-row>
       <v-row>
         <v-subheader>Email recipient details</v-subheader>
@@ -76,7 +81,7 @@
             :rules="[required]"
             label="Send email..."
             :items="emailSendOptions"
-            v-model="form.sendPolicy"
+            v-model="sendingPolicy"
           >
           </v-select>
         </v-col>
@@ -106,7 +111,6 @@
 </template>
 
 <script>
-
 const validEmail = (value) => {
   const regex = /.+@.*\.+.*/gm;
   const isValid = value.every((email) => regex.test(email));
@@ -114,37 +118,89 @@ const validEmail = (value) => {
 };
 export default {
   data: () => ({
-    form: {
-      valid: true,
-      cc: [],
-      to: [],
-      bcc: [],
-      name: '',
-      event: '',
-      sendPolicy: '',
-      sendDays: [],
-      sendHours: [],
-    },
-    daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    formValid: true,
+    sendingPolicy: 'Immediately-ish',
+    form: {},
+    daysOfWeek: [
+      { text: 'Sunday', value: 0 },
+      { text: 'Monday', value: 1 },
+      { text: 'Tuesday', value: 2 },
+      { text: 'Wednesday', value: 3 },
+      { text: 'Thursday', value: 4 },
+      { text: 'Friday', value: 5 },
+      { text: 'Saturday', value: 6 },
+    ],
     // 0 - 23
     hoursOfDay: [...Array(24).keys()],
     required: (v) => !!v || 'Required',
     requiredArray: (v) => !!v.length || 'Required',
     validEmail,
-    events: ['Fraser wakes up before midday', 'Eddie understands React'],
+    events: [
+      'user_joined',
+      'training_complete',
+      'training_expired',
+      'training_change_bulk',
+      'template_example',
+    ],
     emailSendOptions: ['Immediately-ish', 'On a schedule'],
   }),
   computed: {
+    showTrainings() {
+      return this.form?.action?.includes('training');
+    },
+    trainings() {
+      const { Training } = this.$FeathersVuex.api;
+      const { data } = Training.findInStore({});
+      return data;
+    },
     showSchedule() {
-      return this.form.sendPolicy === 'On a schedule';
+      return this.sendingPolicy === 'On a schedule';
+    },
+    id() {
+      return this.$route.params?.id;
+    },
+    storeConfig() {
+      const { NotificationTemplates } = this.$FeathersVuex.api;
+      const config = NotificationTemplates.getFromStore(this.id);
+      return config;
     },
   },
   methods: {
     onTemplateChange(value) {
       this.compiledMarkdown = value;
     },
+    initConfig() {
+      this.form = this.storeConfig?.clone() ?? {};
+      if (this.form.daysOfWeek?.length && this.form.hoursOfDay?.length) {
+        this.sendingPolicy = 'On a schedule';
+      } else {
+        this.sendingPolicy = 'Immediately-ish';
+      }
+    },
+    async loadTrainings() {
+      const { Training } = this.$FeathersVuex.api;
+      try {
+        await Training.find({
+          query: {
+            _id: { $nin: this.trainings.map(({ _id }) => _id) },
+          },
+        });
+      } catch (err) {
+        this.$handleError(err, 'loading training');
+      }
+    },
   },
-  components: {
+  async mounted() {
+    this.initConfig();
+    await this.loadTrainings();
   },
+  watch: {
+    'storeConfig._id': {
+      handler() {
+        this.initConfig();
+      },
+    },
+  },
+  components: {},
 };
 </script>
