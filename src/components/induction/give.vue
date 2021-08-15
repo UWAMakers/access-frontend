@@ -152,6 +152,7 @@ export default {
           inductorId: this.$user._id,
           keys: [
             {
+              emailSent: false,
               key: genKey(),
               expiresAt: new Date(Date.now() + 60 * 60 * 1000),
             },
@@ -175,7 +176,7 @@ export default {
         });
         await this.induction.save();
         this.userIds = [];
-        this.$success('send induction confirmation');
+        this.$success('sent induction confirmation');
       } catch (err) {
         this.$handleError(err, 'sending induction confirmation');
       }

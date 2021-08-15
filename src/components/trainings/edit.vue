@@ -30,8 +30,20 @@
             rows="7"
             outlined
           />
+          <v-alert
+            v-model="cardRes.show"
+            dismissible
+            :type="cardRes.type"
+          >
+            {{ cardRes.message }}
+          </v-alert>
         </v-card-text>
         <v-card-actions>
+          <card-reader
+            v-model="isScanning"
+            label="Test Card"
+            @scan="testCard"
+          />
           <v-spacer />
           <primary-btn
             :loading="loading"
@@ -57,6 +69,17 @@
     <v-col v-show="id" cols="12" md="6">
       <training-items v-model="config.itemIds" @input="configAction('patch-items')" />
       <training-stats :training-id="id" class="mt-4" />
+      <v-card v-if="id" class="mt-4" outlined>
+        <v-card-title>
+          Access Log
+          <v-spacer />
+          <access-filter-dialog v-model="logFilter" />
+        </v-card-title>
+        <access-log
+          :filter="{ trainingId: id, ...logFilter }"
+          :exclude-headers="['trainingId']"
+        />
+      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -65,11 +88,19 @@
 import { fromMd } from '@/util/markdown';
 import TrainingItems from '@/components/trainings/items.vue';
 import TrainingStats from '@/components/trainings/stats.vue';
+import AccessLog from '@/components/access/log.vue';
+import AccessFilterDialog from '@/components/access/filter-dialog.vue';
+import CardReader from '@/components/input/card-reader.vue';
+
+const defaultCardRes = { show: false, type: 'success', message: 'OK' };
 
 export default {
   components: {
     TrainingItems,
     TrainingStats,
+    AccessLog,
+    AccessFilterDialog,
+    CardReader,
   },
   props: {
     id: {
@@ -82,6 +113,9 @@ export default {
       config: {},
       loading: false,
       deleteDialog: false,
+      isScanning: false,
+      logFilter: {},
+      cardRes: { ...defaultCardRes },
     };
   },
   computed: {
@@ -152,6 +186,22 @@ export default {
         }
       }
       this.loading = false;
+    },
+    async testCard(uuid) {
+      this.cardRes = { ...defaultCardRes };
+      try {
+        const uuidStr = uuid.map((v) => v.toString(16)).join('-');
+        const res = await fetch(`${process.env.VUE_APP_API_URL}/access/${this.id}/?uuid=${uuidStr}&test=true`)
+          .then((response) => response.json());
+        if (res.granted) {
+          this.cardRes = { show: true, type: 'success', message: 'You have access!' };
+        } else {
+          this.cardRes = { show: true, type: 'error', message: 'You do not have access!' };
+        }
+      } catch (err) {
+        console.error(err);
+        this.cardRes = { show: true, type: 'error', message: err.message };
+      }
     },
   },
 };
