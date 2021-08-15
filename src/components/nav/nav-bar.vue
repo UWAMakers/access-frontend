@@ -66,14 +66,19 @@ export default {
     AvatarMenu,
     JoinDialog,
   },
-  data() {
-    return {
-      showInduction: false,
-    };
-  },
   computed: {
     btnColor() {
       return this.$vuetify.theme.dark ? 'white' : 'accent';
+    },
+    showInduction() {
+      const { TrainingItem } = this.$FeathersVuex.api;
+      const { total } = TrainingItem.findInStore({
+        query: {
+          type: 'induction',
+          inductorIds: this.$user._id,
+        },
+      });
+      return this.$isAdmin || !!total;
     },
   },
   async mounted() {
@@ -82,19 +87,13 @@ export default {
   methods: {
     async loadInductionVisibility() {
       const { TrainingItem } = this.$FeathersVuex.api;
-      if (this.$isAdmin) {
-        this.showInduction = true;
-        return;
-      }
       try {
-        const { total } = await TrainingItem.find({
+        await TrainingItem.find({
           query: {
             type: 'induction',
             inductorIds: this.$user._id,
-            $limit: 0,
           },
         });
-        this.showInduction = !!total;
       } catch (err) {
         this.$handleError(err, 'initialising the menu');
       }
