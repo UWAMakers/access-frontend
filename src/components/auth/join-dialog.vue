@@ -43,7 +43,7 @@ export default {
         await this.$user.save();
         this.$success('joined makers');
       } catch (err) {
-        this.$handleError('joining makers');
+        this.$handleError(err, 'joining makers');
       }
     },
   },

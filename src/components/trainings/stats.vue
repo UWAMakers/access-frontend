@@ -45,7 +45,6 @@ export default {
       const pendingTotal = this.completionTotals.find((c) => c.status === 'pending')?.total || 0;
       const completeTotal = this.completionTotals.find((c) => c.status === 'complete')?.total || 0;
       const nostartTotal = Math.max(this.userTotal - pendingTotal - completeTotal, 0);
-      console.log(nostartTotal);
       return {
         labels: ['No Progress', 'Pending', 'Complete'],
         datasets: [
@@ -74,7 +73,6 @@ export default {
       try {
         const { total } = await User.find({ query: { $limit: 0 } });
         this.userTotal = total;
-        console.log(total);
       } catch (err) {
         this.$handleError(err, 'loading users total');
       }
@@ -89,7 +87,6 @@ export default {
           },
         });
         this.completionTotals = data;
-        console.log(data);
       } catch (err) {
         this.$handleError(err, 'loading completion totals');
       }

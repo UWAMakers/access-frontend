@@ -1,5 +1,5 @@
 <template>
-  <v-list class="py-0">
+  <v-list v-if="!count" class="py-0">
     <template v-for="(item, i) in items">
       <v-divider :key="`divider-${item._id}`" />
       <v-list-item
@@ -15,10 +15,10 @@
           </v-icon>
           <v-icon v-else-if="item.type !== 'comment'">mdi-circle-outline</v-icon>
         </v-list-item-icon>
-        <v-tooltip top>
+        <v-tooltip top disabled>
           <template #activator="{ on }">
             <v-list-item-content v-on="on">
-              <v-list-item-title>
+              <v-list-item-title style="white-space: inherit">
                 {{i + 1}}. {{item.name}}
               </v-list-item-title>
               <v-list-item-subtitle v-show="item.desc">
@@ -43,6 +43,9 @@
       </v-list-item>
     </template>
   </v-list>
+  <span v-else>
+    {{totalCompleted}} / {{requiredItems.length}}
+  </span>
 </template>
 
 <script>
@@ -59,6 +62,10 @@ export default {
       default: '',
     },
     readonly: {
+      type: Boolean,
+      default: false,
+    },
+    count: {
       type: Boolean,
       default: false,
     },
@@ -83,6 +90,12 @@ export default {
       });
       return this.config?.itemIds
         .map((id) => items.find((item) => item._id === id)).filter((v) => v);
+    },
+    requiredItems() {
+      return this.items.filter((item) => item.type !== 'comment' && item.required);
+    },
+    totalCompleted() {
+      return this.requiredItems.filter((item) => this.itemStatus(item)).length;
     },
   },
   watch: {

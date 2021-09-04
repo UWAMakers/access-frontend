@@ -65,13 +65,9 @@
           <div v-html="fromMd(config.desc)" />
         </v-card-text>
       </v-card>
-    </v-col>
-    <v-col v-show="id" cols="12" md="6">
-      <training-items v-model="config.itemIds" @input="configAction('patch-items')" />
-      <training-stats :training-id="id" class="mt-4" />
       <v-card v-if="id" class="mt-4" outlined>
         <v-card-title>
-          Access Log
+          Card Access Log
           <v-spacer />
           <access-filter-dialog v-model="logFilter" />
         </v-card-title>
@@ -81,6 +77,11 @@
         />
       </v-card>
     </v-col>
+    <v-col v-show="id" cols="12" md="6">
+      <training-items v-model="config.itemIds" @input="configAction('patch-items')" />
+      <training-stats :training-id="id" class="mt-4" />
+      <training-user-status-list :training-id="id" class="mt-4" />
+    </v-col>
   </v-row>
 </template>
 
@@ -88,6 +89,7 @@
 import { fromMd } from '@/util/markdown';
 import TrainingItems from '@/components/trainings/items.vue';
 import TrainingStats from '@/components/trainings/stats.vue';
+import TrainingUserStatusList from '@/components/trainings/user-status-list.vue';
 import AccessLog from '@/components/access/log.vue';
 import AccessFilterDialog from '@/components/access/filter-dialog.vue';
 import CardReader from '@/components/input/card-reader.vue';
@@ -98,6 +100,7 @@ export default {
   components: {
     TrainingItems,
     TrainingStats,
+    TrainingUserStatusList,
     AccessLog,
     AccessFilterDialog,
     CardReader,

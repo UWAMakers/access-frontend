@@ -94,37 +94,41 @@ export default {
         return;
       }
       this.loading = true;
-      const res = await Access.find({ query: this.query });
-      this.logCache[this.queryKey] = res;
-      this.logs = res;
-      const userIds = uniq(res.data.map((log) => log.userId));
-      const trainingIds = uniq(res.data.map((log) => log.trainingId));
-      const { data: existingUsers } = User.findInStore({
-        query: { _id: { $in: userIds } },
-      });
-      if (existingUsers.length !== userIds.length) {
-        await User.find({
-          query: {
-            _id: {
-              $in: userIds.filter((id) => !existingUsers.some((user) => user._id === id)),
-            },
-          },
-          paginate: false,
+      try {
+        const res = await Access.find({ query: this.query });
+        this.logCache[this.queryKey] = res;
+        this.logs = res;
+        const userIds = uniq(res.data.map((log) => log.userId));
+        const trainingIds = uniq(res.data.map((log) => log.trainingId));
+        const { data: existingUsers } = User.findInStore({
+          query: { _id: { $in: userIds } },
         });
-      }
-      const { data: existingTraining } = Training.findInStore({
-        query: { _id: { $in: trainingIds } },
-      });
-      if (existingTraining.length !== trainingIds.length) {
-        await Training.find({
-          query: {
-            _id: {
-              $in: trainingIds
-                .filter((id) => !existingTraining.some((training) => training._id === id)),
+        if (existingUsers.length !== userIds.length) {
+          await User.find({
+            query: {
+              _id: {
+                $in: userIds.filter((id) => !existingUsers.some((user) => user._id === id)),
+              },
             },
-          },
-          paginate: false,
+            paginate: false,
+          });
+        }
+        const { data: existingTraining } = Training.findInStore({
+          query: { _id: { $in: trainingIds } },
         });
+        if (existingTraining.length !== trainingIds.length) {
+          await Training.find({
+            query: {
+              _id: {
+                $in: trainingIds
+                  .filter((id) => !existingTraining.some((training) => training._id === id)),
+              },
+            },
+            paginate: false,
+          });
+        }
+      } catch (err) {
+        this.$handleError(err, 'loading logs');
       }
       this.loading = false;
     },

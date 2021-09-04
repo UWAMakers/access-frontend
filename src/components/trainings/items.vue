@@ -13,18 +13,23 @@
         class="item-panel"
       >
         <v-expansion-panel-header>
-          <v-row align="center" class="pl-2 pr-4">
-            <item-mover
-              :items="value"
-              :item="item._id"
-              @update:items="$emit('input', $event)"
-            />
-            <strong>{{item.name}}</strong>
-            <v-spacer />
-            <v-chip small class="mr-2">
-              {{types.find(t => t.value === item.type).text}}
-            </v-chip>
-            <delete-dialog :name="item.name" @delete="deleteItem(item)" />
+          <v-row align="center" class="pr-2">
+            <v-col cols="auto" class="pr-1">
+              <item-mover
+                :items="value"
+                :item="item._id"
+                @update:items="$emit('input', $event)"
+              />
+            </v-col>
+            <v-col class="px-1">
+              <strong>{{item.name}}</strong>
+            </v-col>
+            <v-col cols="auto" class="pl-1">
+              <v-chip small class="mr-2">
+                {{types.find(t => t.value === item.type).text}}
+              </v-chip>
+              <delete-dialog :name="item.name" @delete="deleteItem(item)" />
+            </v-col>
           </v-row>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
