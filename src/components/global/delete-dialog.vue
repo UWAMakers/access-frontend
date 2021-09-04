@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" max-width="300">
     <template #activator="{ on }">
       <slot name="activator" :on="on">
-        <v-btn icon v-on="on">
+        <v-btn icon @click.prevent="on.click">
           <v-icon>mdi-trash-can-outline</v-icon>
         </v-btn>
       </slot>
