@@ -53,9 +53,14 @@
             <v-list-item-action class="my-0">
               <item-mover :items="configs" :item="item" @update:items="updateOrder" />
             </v-list-item-action>
-            <v-list-item-title>
-              {{item.name}}
-            </v-list-item-title>
+            <v-tooltip right>
+              <template #activator="{ on }">
+                <v-list-item-title v-on="item.name.length > 30 ? on : undefined">
+                  {{item.name}}
+                </v-list-item-title>
+              </template>
+              <span>{{item.name}}</span>
+            </v-tooltip>
           </v-list-item>
 
           <v-divider />

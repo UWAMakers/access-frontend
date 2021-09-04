@@ -78,7 +78,7 @@
       <v-col v-if="userId" cols="12" lg="6">
         <v-card outlined>
           <v-card-title>
-            Access Log
+            Card Access Log
             <v-spacer />
             <access-filter-dialog v-model="logFilter" hide-user-selector />
           </v-card-title>

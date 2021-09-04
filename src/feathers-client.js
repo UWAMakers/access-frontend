@@ -21,8 +21,14 @@ const feathersClient = feathers()
       find: [
         async (ctx) => {
           if (ctx.arguments[0] && ctx.arguments[0].paginate !== false) return ctx;
-          const { data, limit, total } = await ctx.service.find({
+          const { query } = ctx.arguments[0];
+          const limit = query.$limit || 50;
+          const { data, total } = await ctx.service.find({
             ...ctx.arguments[0],
+            query: {
+              ...query,
+              $limit: limit,
+            },
             paginate: true,
           });
           if (total <= limit) {
