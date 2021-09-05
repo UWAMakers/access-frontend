@@ -10,7 +10,7 @@
 <script>
 // @ is an alias to /src
 import EmailList from '@/components/notification-templates/list.vue';
-import EmailView from '@/components/notification-templates/view.vue';
+import EmailView from '@/components/notification-templates/email-panel.vue';
 
 export default {
   name: 'Email',
