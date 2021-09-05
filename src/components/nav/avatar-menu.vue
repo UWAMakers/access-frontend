@@ -25,34 +25,33 @@
           <v-list-item-icon>
             <v-icon>mdi-wrench</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>
-            Training Config
-          </v-list-item-title>
+          <v-list-item-title> Training Config </v-list-item-title>
         </v-list-item>
+        <v-list-item v-if="$isAdmin" to="/email">
+          <v-list-item-icon>
+            <v-icon>mdi-at</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title> Email management </v-list-item-title>
+        </v-list-item>
+        <v-divider v-if="$isAdmin" />
         <v-list-item v-if="$isAdmin" to="/users">
           <v-list-item-icon>
             <v-icon>mdi-account-multiple</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>
-            User Management
-          </v-list-item-title>
+          <v-list-item-title> User Management </v-list-item-title>
         </v-list-item>
         <v-divider v-if="$isAdmin" />
         <v-list-item to="/bug-report">
           <v-list-item-icon>
             <v-icon>mdi-bug</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>
-            Report bug
-          </v-list-item-title>
+          <v-list-item-title> Report bug </v-list-item-title>
         </v-list-item>
         <v-list-item to="/logout">
           <v-list-item-icon>
             <v-icon>mdi-logout</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>
-            Logout
-          </v-list-item-title>
+          <v-list-item-title> Logout </v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>

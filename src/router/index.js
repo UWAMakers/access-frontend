@@ -6,6 +6,7 @@ import Login from '../views/Login.vue';
 import Feedback from '../views/Feedback.vue';
 import Training from '../views/Training.vue';
 import Induction from '../views/Induction.vue';
+import Email from '../views/Email.vue';
 import Review from '../views/Review.vue';
 import Cards from '../views/Cards.vue';
 
@@ -46,6 +47,12 @@ const routes = [
     component: Training,
   },
   {
+    path: '/email/:id?',
+    name: 'Email',
+    component: Email,
+    meta: { roles: ['admin', 'super_admin'] },
+  },
+  {
     path: '/induction/:key?',
     name: 'Induction',
     component: Induction,
@@ -68,11 +75,15 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isPublic = to.matched.some((record) => !!record.meta.isPublic);
+  // eslint-disable-next-line
+  const isPublic = to.matched.some(record => !!record.meta.isPublic);
   const user = store.getters['auth/user'];
   if (to.path === '/logout') {
     // eslint-disable-next-line no-console
-    return store.dispatch('auth/logout').catch(console.error).then(() => next({ path: '/login' }));
+    return store
+      .dispatch('auth/logout')
+      .catch(console.error)
+      .then(() => next({ path: '/login' }));
   }
   if (isPublic && user) {
     return next({ path: '/' });
@@ -83,8 +94,12 @@ router.beforeEach((to, from, next) => {
       query: to.path === '/' ? {} : { followPath: to.path },
     });
   }
-  if (to.matched.some((record) => record.meta.roles
-    && !record.meta.roles.some((r) => user.roles.includes(r)))) {
+  if (
+    to.matched.some(
+      // eslint-disable-next-line
+      record => record.meta.roles && !record.meta.roles.some(r => user.roles.includes(r))
+    )
+  ) {
     return next({ path: '/' });
   }
   return next();
