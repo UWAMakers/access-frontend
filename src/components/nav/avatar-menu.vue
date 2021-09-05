@@ -8,18 +8,24 @@
           </v-badge>
         </span>
       </template>
-      <v-list>
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon>mdi-account-circle</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title> {{ $user.name }} </v-list-item-title>
-            <v-list-item-subtitle>
-              {{ $user.username }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
+      <v-list class="py-0">
+        <user-profile>
+          <template #activator="{ on }">
+            <v-list-item v-on="on">
+              <v-list-item-icon>
+                <v-icon>mdi-account-edit-outline</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $user.name }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ $user.username }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </user-profile>
         <v-divider />
         <v-list-item v-if="$isAdmin" to="/training-config">
           <v-list-item-icon>
@@ -60,10 +66,12 @@
 
 <script>
 import UserAvatar from '@/components/users/avatar.vue';
+import UserProfile from '@/components/users/profile.vue';
 
 export default {
   components: {
     UserAvatar,
+    UserProfile,
   },
 };
 </script>
