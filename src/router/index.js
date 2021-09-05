@@ -19,7 +19,7 @@ const routes = [
     component: Home,
   },
   {
-    path: '/users/:id?',
+    path: '/user/:id?',
     name: 'Users',
     component: () => import(/* webpackChunkName: "users" */ '../views/Users.vue'),
     meta: { roles: ['admin', 'super_admin'] },
@@ -63,7 +63,7 @@ const routes = [
     component: Review,
   },
   {
-    path: '/cards',
+    path: '/card',
     name: 'Cards',
     component: Cards,
   },
