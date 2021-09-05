@@ -34,7 +34,7 @@
           <v-list-item-title> Email management </v-list-item-title>
         </v-list-item>
         <v-divider v-if="$isAdmin" />
-        <v-list-item v-if="$isAdmin" to="/users">
+        <v-list-item v-if="$isAdmin" to="/user">
           <v-list-item-icon>
             <v-icon>mdi-account-multiple</v-icon>
           </v-list-item-icon>

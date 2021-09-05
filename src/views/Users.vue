@@ -29,7 +29,7 @@
         bench="1"
       >
         <template v-slot:default="{ item }">
-          <v-list-item :key="item._id" :to="`/users/${item._id}`">
+          <v-list-item :key="item._id" :to="`/user/${item._id}`">
             <v-list-item-icon class="mr-2">
               <user-avatar :user="item" size="36" />
             </v-list-item-icon>

@@ -9,7 +9,7 @@
     <div v-show="$vuetify.breakpoint.mdAndUp">
       <v-btn to="/" :color="btnColor" text class="mx-1">Home</v-btn>
       <v-btn to="/training" :color="btnColor" text class="mx-1">Training</v-btn>
-      <v-btn to="/cards" :color="btnColor" text class="mx-1">Cards</v-btn>
+      <v-btn to="/card" :color="btnColor" text class="mx-1">Cards</v-btn>
       <v-btn
         v-show="showInduction"
         to="/induction"

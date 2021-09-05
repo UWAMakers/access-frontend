@@ -134,6 +134,7 @@ export default {
   methods: {
     startCase,
     async loadData() {
+      if (!this.trainingId) return;
       const { Completion, User } = this.$FeathersVuex.api;
       if (this.cache[this.queryKey]) {
         this.completions = this.cache[this.queryKey];

@@ -98,7 +98,7 @@ export default {
           icon: 'school-outline',
         },
         {
-          to: '/cards',
+          to: '/card',
           name: 'Manage Key Cards',
           icon: 'card-account-details-outline',
         },
@@ -120,7 +120,7 @@ export default {
               icon: 'wrench-outline',
             },
             {
-              to: '/users',
+              to: '/user',
               name: 'User Management',
               icon: 'account-multiple-outline',
             },
