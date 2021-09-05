@@ -131,7 +131,7 @@
                       :rules="[requiredArray]"
                       label="Days of the week"
                       :items="daysOfWeek"
-                      v-model="form.sendDays"
+                      v-model="form.daysOfWeek"
                     >
                     </v-autocomplete>
                   </v-col>
@@ -141,7 +141,7 @@
                       :rules="[requiredArray]"
                       label="Hours of the day"
                       :items="hoursOfDay"
-                      v-model="form.sendHours"
+                      v-model="form.hoursOfDay"
                     >
                     </v-autocomplete>
                   </v-col>
