@@ -9,13 +9,7 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col
-        v-for="(link, i) in links"
-        :key="i"
-        cols="6"
-        md="4"
-        lg="2"
-      >
+      <v-col v-for="(link, i) in links" :key="i" cols="6" md="4" lg="2">
         <v-card
           :href="link.href || undefined"
           :target="link.href ? '_blank' : undefined"
@@ -24,11 +18,11 @@
           outlined
         >
           <v-card-text>
-            <v-icon size="5em">mdi-{{link.icon}}</v-icon>
+            <v-icon size="5em">mdi-{{ link.icon }}</v-icon>
           </v-card-text>
           <div class="home-link-title mb-4 px-2">
             <h2 class="text-center">
-              {{link.name}}
+              {{ link.name }}
             </h2>
           </div>
           <v-card-actions v-if="link._id && $isAdmin" class="home-link-actions">
@@ -41,51 +35,24 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog
-      :value="!!currentLink"
-      max-width="400"
-      @input="!$event && closeLink()"
-    >
+    <v-dialog :value="!!currentLink" max-width="400" @input="!$event && closeLink()">
       <v-card v-if="currentLink">
-        <v-card-title>
-          {{currentLink._id ? 'Edit' : 'Add'}} Link
-        </v-card-title>
+        <v-card-title> {{ currentLink._id ? 'Edit' : 'Add' }} Link </v-card-title>
         <v-card-text>
           <p>
-            <a href="https://mdisearch.com" target="_blank">
-              Find Icons Here.
-            </a>
+            <a href="https://mdisearch.com" target="_blank"> Find Icons Here. </a>
           </p>
           <v-alert v-show="showError" type="warning">
             Please complete all fields before saving.
           </v-alert>
-          <v-text-field
-            label="Name"
-            v-model="currentLink.name"
-            outlined
-            required
-          />
-          <v-text-field
-            label="URL"
-            v-model="currentLink.href"
-            outlined
-            required
-          />
-          <v-text-field
-            label="Icon"
-            v-model="currentLink.icon"
-            outlined
-            required
-          />
+          <v-text-field label="Name" v-model="currentLink.name" outlined required />
+          <v-text-field label="URL" v-model="currentLink.href" outlined required />
+          <v-text-field label="Icon" v-model="currentLink.icon" outlined required />
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn text @click="closeLink">
-            Cancel
-          </v-btn>
-          <primary-btn :loading="loading" @click="saveLink()">
-            Save
-          </primary-btn>
+          <v-btn text @click="closeLink"> Cancel </v-btn>
+          <primary-btn :loading="loading" @click="saveLink()"> Save </primary-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -103,9 +70,11 @@ export default {
   },
   computed: {
     valid() {
-      return this.currentLink?.name?.trim()
+      return (
+        this.currentLink?.name?.trim()
         && this.currentLink?.href?.trim()
-        && this.currentLink?.icon?.trim();
+        && this.currentLink?.icon?.trim()
+      );
     },
     showInduction() {
       const { TrainingItem } = this.$FeathersVuex.api;
@@ -133,31 +102,35 @@ export default {
           name: 'Manage Key Cards',
           icon: 'card-account-details-outline',
         },
-        ...(this.showInduction ? [
-          {
-            to: '/induction',
-            name: 'Induct',
-            icon: 'clipboard-check-outline',
-          },
-        ] : []),
+        ...(this.showInduction
+          ? [
+            {
+              to: '/induction',
+              name: 'Induct',
+              icon: 'clipboard-check-outline',
+            },
+          ]
+          : []),
         ...this.remoteLinks,
-        ...(this.$isAdmin ? [
-          {
-            to: '/training-config',
-            name: 'Training Config',
-            icon: 'wrench-outline',
-          },
-          {
-            to: '/users',
-            name: 'User Management',
-            icon: 'account-multiple-outline',
-          },
-          {
-            to: '/notifications',
-            name: 'Email Templates',
-            icon: 'email-edit-outline',
-          },
-        ] : []),
+        ...(this.$isAdmin
+          ? [
+            {
+              to: '/training-config',
+              name: 'Training Config',
+              icon: 'wrench-outline',
+            },
+            {
+              to: '/users',
+              name: 'User Management',
+              icon: 'account-multiple-outline',
+            },
+            {
+              to: '/email',
+              name: 'Email Templates',
+              icon: 'email-edit-outline',
+            },
+          ]
+          : []),
       ];
     },
   },
