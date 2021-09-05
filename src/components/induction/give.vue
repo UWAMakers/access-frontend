@@ -1,8 +1,6 @@
 <template>
   <v-card outlined>
-    <v-card-title>
-      Give Induction
-    </v-card-title>
+    <v-card-title> Give Induction </v-card-title>
     <v-card-text>
       <v-select
         v-model="selectedItem"
@@ -17,14 +15,33 @@
         <template #item="{ item }">
           <v-list-item-content>
             <v-list-item-title>
-              {{item.name}}
+              {{
+                getTrainings(item)
+                  .map(({ name }) => name)
+                  .join(', ')
+              }}
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{item.desc}}
+              {{ item.name }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </template>
+        <template #selection="{ item }">
+          <v-list-item-content>
+            <v-list-item-title>
+              {{
+                getTrainings(item)
+                  .map(({ name }) => name)
+                  .join(', ')
+              }}
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              {{ item.name }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </template>
       </v-select>
+
       <p v-show="selectedItem && !induction">
         Once you've gone through the induction with everyone, click Continue.
       </p>
@@ -39,40 +56,26 @@
         <v-icon right x-small>mdi-open-in-new</v-icon>
       </primary-btn>
       <v-spacer />
-      <primary-btn
-        v-show="selectedItem && !induction"
-        :loading="loadingInduction"
-        @click="submit"
-      >
+      <primary-btn v-show="selectedItem && !induction" :loading="loadingInduction" @click="submit">
         Continue
       </primary-btn>
     </v-card-actions>
     <v-card-text v-if="url" class="text-center">
       <qr :url="url" style="max-width: 300px" />
       <p v-if="$isDev">
-        <a target="_blank" :href="url">{{url}}</a>
+        <a target="_blank" :href="url">{{ url }}</a>
       </p>
-      <p>
-        Get everyone that has received the induction to scan this QR code.
-      </p>
+      <p>Get everyone that has received the induction to scan this QR code.</p>
       <p>
         If they cannot scan it for whatever reason, please add them below
-        <br>
+        <br />
         and we will send them an email with the link.
       </p>
     </v-card-text>
     <v-card-actions v-show="url">
-      <user-selector
-        v-model="userIds"
-        label="Manual Inductees"
-        :exclude-ids="excludeIds"
-      />
+      <user-selector v-model="userIds" label="Manual Inductees" :exclude-ids="excludeIds" />
       <v-spacer />
-      <primary-btn
-        :disabled="!userIds.length"
-        :loading="loadingInduction"
-        @click="sendEmail"
-      >
+      <primary-btn :disabled="!userIds.length" :loading="loadingInduction" @click="sendEmail">
         Send Email
       </primary-btn>
     </v-card-actions>
@@ -124,8 +127,17 @@ export default {
     await this.loadItems();
   },
   methods: {
+    getTrainings(item) {
+      const { Training } = this.$FeathersVuex.api;
+      const { data: trainingItem } = Training.findInStore({
+        query: {
+          itemIds: item._id,
+        },
+      });
+      return trainingItem;
+    },
     async loadItems() {
-      const { TrainingItem } = this.$FeathersVuex.api;
+      const { TrainingItem, Training } = this.$FeathersVuex.api;
       const existingIds = this.items.map((item) => item._id);
       this.loadingItems = true;
       try {
@@ -134,6 +146,13 @@ export default {
             _id: { $nin: existingIds },
             ...(!this.$isAdmin ? { inductorIds: this.$user._id } : {}),
             type: 'induction',
+          },
+          paginate: false,
+        });
+        const itemIds = this.items.map(({ _id }) => _id);
+        await Training.find({
+          query: {
+            itemIds: { $in: itemIds },
           },
           paginate: false,
         });
