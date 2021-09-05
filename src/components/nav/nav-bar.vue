@@ -1,5 +1,10 @@
 <template>
-  <v-app-bar app color="secondary" dark clipped-left class="elevation-1">
+  <v-app-bar
+    app
+    :color="!$vuetify.theme.dark ? 'secondary' : undefined"
+    clipped-left
+    class="elevation-1"
+  >
     <img
       alt="UWA Makers"
       src="/icon.png"
