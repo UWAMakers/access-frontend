@@ -59,6 +59,13 @@
           </v-list-item-icon>
           <v-list-item-title> Logout </v-list-item-title>
         </v-list-item>
+        <v-list-item style="min-height: 28px">
+          <v-list-item-subtitle>
+            <small>
+              <version />
+            </small>
+          </v-list-item-subtitle>
+        </v-list-item>
       </v-list>
     </v-menu>
   </div>
@@ -67,11 +74,13 @@
 <script>
 import UserAvatar from '@/components/users/avatar.vue';
 import UserProfile from '@/components/users/profile.vue';
+import Version from '@/components/general/version.vue';
 
 export default {
   components: {
     UserAvatar,
     UserProfile,
+    Version,
   },
 };
 </script>

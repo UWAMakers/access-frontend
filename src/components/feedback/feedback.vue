@@ -7,18 +7,26 @@
       <v-textarea v-model="msg" label="Description" class="mt-4" counter outlined auto-grow />
     </v-card-text>
     <v-card-actions>
-      <primary-button v-show="$isDev" @click="testError">Brew Coffee</primary-button>
+      <primary-btn v-show="$isDev" @click="testError">Brew Coffee</primary-btn>
+      <v-col cols="auto">
+        <small>
+          <version ref="version" />
+        </small>
+      </v-col>
       <v-spacer />
-      <primary-button :loading="loading" :disabled="!msg" @click="submit"> Submit </primary-button>
+      <primary-btn :loading="loading" :disabled="!msg" @click="submit"> Submit </primary-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import PrimaryButton from '@/components/global/primary-btn.vue';
+import Version from '@/components/general/version.vue';
 import { mapMutations } from 'vuex';
 
 export default {
+  components: {
+    Version,
+  },
   data: () => ({
     msg: '',
     loading: false,
@@ -28,8 +36,13 @@ export default {
     async submit() {
       this.loading = true;
       const { Feedback } = this.$FeathersVuex.api;
+      const { frontendVersion, backendVersion } = this.$refs.version;
       const newFeedback = new Feedback({
         msg: this.msg,
+        versions: {
+          frontend: frontendVersion,
+          backend: backendVersion,
+        },
       });
       try {
         await newFeedback.save();
@@ -43,9 +56,6 @@ export default {
     testError() {
       this.$handleError(new Error("418 I'm a Teapot"), 'brewing coffee');
     },
-  },
-  components: {
-    PrimaryButton,
   },
 };
 </script>

@@ -59,10 +59,23 @@ export default {
     ...mapMutations(['closeSnackbar']),
     async report() {
       const { Feedback } = this.$FeathersVuex.api;
+      this.loading = true;
+      let backend = 'unknown';
+      try {
+        const url = `${process.env.VUE_APP_API_URL.replace(/\/$/, '')}/version`;
+        const { gitHash } = await fetch(url).then((res) => res.json());
+        backend = gitHash;
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      }
       const report = new Feedback({
         msg: this.snackbar.errorReport,
+        versions: {
+          frontend: process.env.VUE_APP_GIT_HASH,
+          backend,
+        },
       });
-      this.loading = true;
       try {
         await report.save();
         this.$success('sent error report');
