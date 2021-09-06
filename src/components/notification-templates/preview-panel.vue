@@ -164,6 +164,12 @@ export default {
       this.loading = false;
     }, 200),
   },
+  watch: {
+    id() {
+      this.initConfig();
+      this.onChange();
+    },
+  },
   computed: {
     storeConfig() {
       const { NotificationTemplates } = this.$FeathersVuex.api;
