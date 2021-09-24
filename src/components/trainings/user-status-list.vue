@@ -30,6 +30,9 @@
       <template #item.status="{ item }">
         {{ startCase(item.status) }}
       </template>
+      <template #item.items="{ item }">
+        {{ formatDate(getInductionCompletedAtTime(item)) }}
+      </template>
       <template #item.steps="{ item }">
         <view-items :id="trainingId" :user="getUser(item.userId)" count />
         <v-dialog max-width="500px">
@@ -65,6 +68,7 @@ import tinySha from 'tiny-sha256';
 import uniq from 'lodash/uniq';
 import { startCase } from 'lodash';
 import ViewItems from '@/components/trainings/view-items.vue';
+import { format } from 'date-fns';
 
 export default {
   components: {
@@ -118,6 +122,7 @@ export default {
         { text: 'User', value: 'userId' },
         { text: 'Pheme Number', value: 'username' },
         { text: 'Status', value: 'status' },
+        { text: 'Last Induction Completion Time', value: 'items' },
         { text: 'Steps', value: 'steps' },
         { text: 'Actions', value: 'actions' },
       ].filter((header) => !this.excludeHeaders.includes(header.value));
@@ -132,6 +137,19 @@ export default {
     await this.loadData();
   },
   methods: {
+    getInductionCompletedAtTime(item) {
+      const inductionItems = item.items.filter(({ inductionId }) => !!inductionId);
+      const confirmedAtDates = inductionItems.map(({ confirmedAt }) => new Date(confirmedAt));
+      confirmedAtDates.sort((a, b) => (b - a));
+      const [latestConfirmationDate] = confirmedAtDates;
+      return latestConfirmationDate;
+    },
+    isValidDate(d) {
+      return d instanceof Date && !Number.isNaN(d.valueOf());
+    },
+    formatDate(d) {
+      return this.isValidDate(d) ? format(d, 'yyyy-MM-dd HH:mm:ss') : '';
+    },
     startCase,
     async loadData() {
       if (!this.trainingId) return;
