@@ -90,10 +90,10 @@
         <v-subheader>Template render</v-subheader>
       </v-col>
     </v-row>
-    <v-form @input="$emit('input', form)">
+    <v-form>
       <v-row justify="center">
         <v-col cols="6">
-          <v-textarea v-model="form.body" rounded filled multiline rows="15" @input="onChange()">
+          <v-textarea v-model="form.body" rounded filled multiline rows="15" @input="onChange">
           </v-textarea>
         </v-col>
         <v-divider vertical></v-divider>
@@ -105,7 +105,7 @@
       </v-row>
       <v-row>
         <v-col cols="3">
-          <v-text-field @input="onChange()" v-model="form.buttonText" label="Call to action text">
+          <v-text-field @input="onChange" v-model="form.buttonText" label="Call to action text">
           </v-text-field>
         </v-col>
         <v-col cols="3">
@@ -145,6 +145,7 @@ export default {
     },
     async onChange() {
       this.loading = true;
+      this.$emit('input', this.form);
       await this.loadPreview();
       this.loading = false;
     },
@@ -166,6 +167,7 @@ export default {
   },
   watch: {
     id() {
+      console.log('id changed');
       this.initConfig();
       this.onChange();
     },
