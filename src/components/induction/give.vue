@@ -173,7 +173,7 @@ export default {
             {
               emailSent: false,
               key: genKey(),
-              expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+              expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000),
             },
           ],
         });
@@ -191,7 +191,7 @@ export default {
         this.induction.keys.push({
           key: genKey(),
           userIds: this.userIds,
-          expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+          expiresAt: new Date(Date.now() + 72 * 60 * 60 * 1000),
         });
         await this.induction.save();
         this.userIds = [];
