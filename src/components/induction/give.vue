@@ -9,6 +9,7 @@
         :loading="loadingItems"
         label="Select Induction"
         item-text="ref"
+        item-value="_id"
         return-object
         outlined
       >
