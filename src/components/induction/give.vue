@@ -8,7 +8,8 @@
         :disabled="!!induction"
         :loading="loadingItems"
         label="Select Induction"
-        item-text="name"
+        item-text="ref"
+        item-value="_id"
         return-object
         outlined
       >
