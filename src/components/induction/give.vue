@@ -120,8 +120,9 @@ export default {
       return `${window.location.origin}/induction/${key?.key}`;
     },
     excludeIds() {
-      if (!this.induction) return [];
-      return this.induction.keys.reduce((a, k) => [...a, ...(k.userIds || [])], []);
+      const ids = [this.$user._id];
+      if (!this.induction) return ids;
+      return this.induction.keys.reduce((a, k) => [...a, ...(k.userIds || [])], ids);
     },
   },
   async mounted() {
