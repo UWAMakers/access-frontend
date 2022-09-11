@@ -1,7 +1,8 @@
 <template>
   <v-card outlined>
     <v-card-title>
-      Edit User
+      Edit {{user.name}}
+      <v-spacer />
     </v-card-title>
     <v-card-text>
     <v-row>
@@ -67,6 +68,9 @@
     </v-row>
     </v-card-text>
     <v-card-actions>
+      <div class="joined-at pl-2">
+        Joined on: {{ joinedAt }}
+      </div>
       <v-spacer />
       <primary-btn
         :loading="loading"
@@ -79,6 +83,8 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
+
 export default {
   props: {
     id: {
@@ -98,6 +104,10 @@ export default {
         { text: 'Admin', value: 'admin' },
         { text: 'Super Admin', value: 'super_admin', disabled: this.$user?._id === this.id },
       ];
+    },
+    joinedAt() {
+      if (!this.user?.preferences?.joinedAt) return 'Not a Member';
+      return dayjs(this.user.preferences.joinedAt).format('Do MMM, YYYY [@] h:mm A');
     },
   },
   async mounted() {
@@ -137,3 +147,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.joined-at {
+  font-size: 0.8rem;
+}
+</style>

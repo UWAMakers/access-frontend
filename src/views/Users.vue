@@ -10,6 +10,9 @@
             User Management
           </v-list-item-title>
         </v-list-item-content>
+        <v-list-item-action v-if="$isSuperAdmin">
+          <export-users :filter="{ 'preferences.joinedAt': { $gt: (new Date(0)).toJSON() } }" />
+        </v-list-item-action>
       </v-list-item>
       <v-list-item>
         <v-list-item-icon class="mr-2">
@@ -97,6 +100,7 @@ import ViewItems from '@/components/trainings/view-items.vue';
 import AccessLog from '@/components/access/log.vue';
 import AccessFilterDialog from '@/components/access/filter-dialog.vue';
 import searchRegex from '@/util/search-regex';
+import ExportUsers from '@/components/users/export-users.vue';
 
 export default {
   components: {
@@ -106,6 +110,7 @@ export default {
     ViewItems,
     AccessLog,
     AccessFilterDialog,
+    ExportUsers,
   },
   data() {
     return {
