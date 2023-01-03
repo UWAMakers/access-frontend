@@ -97,11 +97,11 @@ export default {
           name: 'Training',
           icon: 'school-outline',
         },
-        {
-          to: '/card',
-          name: 'Manage Key Cards',
-          icon: 'card-account-details-outline',
-        },
+        // {
+        //   to: '/card',
+        //   name: 'Manage Key Cards',
+        //   icon: 'card-account-details-outline',
+        // },
         ...(this.showInduction
           ? [
             {

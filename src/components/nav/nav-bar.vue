@@ -1,5 +1,6 @@
 <template>
   <v-app-bar
+    v-if="$user && $user._id && !$route.meta.isPublic"
     app
     :color="!$vuetify.theme.dark ? 'secondary' : undefined"
     clipped-left
@@ -14,7 +15,7 @@
     <div v-show="$vuetify.breakpoint.mdAndUp">
       <v-btn to="/" :color="btnColor" text class="mx-1">Home</v-btn>
       <v-btn to="/training" :color="btnColor" text class="mx-1">Training</v-btn>
-      <v-btn to="/card" :color="btnColor" text class="mx-1">Cards</v-btn>
+      <!-- <v-btn to="/card" :color="btnColor" text class="mx-1">Cards</v-btn> -->
       <v-btn
         v-show="showInduction"
         to="/induction"
@@ -40,9 +41,9 @@
           <v-list-item to="/training">
             <v-list-item-title>Training</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/cards">
+          <!-- <v-list-item to="/cards">
             <v-list-item-title>Cards</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item v-show="showInduction" to="/induction">
             <v-list-item-title>Induct</v-list-item-title>
           </v-list-item>
@@ -76,6 +77,7 @@ export default {
       return this.$vuetify.theme.dark ? 'white' : 'accent';
     },
     showInduction() {
+      if (!this.$user?._id) return false;
       const { TrainingItem } = this.$FeathersVuex.api;
       const { total } = TrainingItem.findInStore({
         query: {
@@ -91,6 +93,7 @@ export default {
   },
   methods: {
     async loadInductionVisibility() {
+      if (!this.$user?._id) return;
       const { TrainingItem } = this.$FeathersVuex.api;
       try {
         await TrainingItem.find({

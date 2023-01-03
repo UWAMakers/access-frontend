@@ -11,6 +11,7 @@ ${error.stack}
 
 const celebrateEmojis = ['🎉', '🎊', '✨', '🥳', '🍾', '🍆', '🎆', '🥂', '🍻', '🕺', '💃', '👍'];
 const randomEmoji = () => celebrateEmojis[Math.floor(Math.random() * celebrateEmojis.length)];
+const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
 export default {
   methods: {
@@ -31,6 +32,23 @@ export default {
         text: `${randomEmoji()} Successfully ${text}!`,
         severity: 'success',
       });
+    },
+    async $try(action, fn, options = {}) {
+      try {
+        await fn();
+        if (options.success) {
+          this.$store.commit('showSnackbar', {
+            text: `${randomEmoji()} ${capitalize(action)} was successful!`,
+            severity: 'success',
+          });
+        }
+      } catch (error) {
+        if (options.onError) {
+          options.onError(error);
+        } else {
+          this.$handleError(error, action);
+        }
+      }
     },
   },
 };

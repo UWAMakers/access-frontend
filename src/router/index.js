@@ -34,7 +34,7 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
-    meta: { isPublic: true },
+    meta: { isPublic: true, isPublicOnly: true },
   },
   {
     path: '/bug-report',
@@ -67,6 +67,12 @@ const routes = [
     name: 'Cards',
     component: Cards,
   },
+  {
+    path: '/verify',
+    name: 'Verify',
+    component: () => import(/* webpackChunkName: "verify" */ '../views/Verify.vue'),
+    meta: { isPublic: true },
+  },
 ];
 
 const router = new VueRouter({
@@ -75,8 +81,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // eslint-disable-next-line
-  const isPublic = to.matched.some(record => !!record.meta.isPublic);
+  const isPublic = to.matched.some((record) => !!record.meta.isPublic);
+  const isPublicOnly = to.matched.some((record) => !!record.meta.isPublicOnly);
   const user = store.getters['auth/user'];
   if (to.path === '/logout') {
     // eslint-disable-next-line no-console
@@ -85,7 +91,7 @@ router.beforeEach((to, from, next) => {
       .catch(console.error)
       .then(() => next({ path: '/login' }));
   }
-  if (isPublic && user) {
+  if (isPublicOnly && user) {
     return next({ path: '/' });
   }
   if (!isPublic && !user) {
@@ -96,8 +102,7 @@ router.beforeEach((to, from, next) => {
   }
   if (
     to.matched.some(
-      // eslint-disable-next-line
-      record => record.meta.roles && !record.meta.roles.some(r => user.roles.includes(r))
+      (record) => record.meta.roles && !record.meta.roles.some((r) => user.roles.includes(r)),
     )
   ) {
     return next({ path: '/' });

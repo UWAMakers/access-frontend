@@ -10,7 +10,6 @@
         <v-text-field
           v-model.trim="user.firstName"
           label="First Name"
-          disabled
           outlined
         />
       </v-col>
@@ -18,23 +17,29 @@
         <v-text-field
           v-model.trim="user.lastName"
           label="Last Name"
-          disabled
           outlined
         />
       </v-col>
       <v-col cols="12" sm="6">
         <v-text-field
           v-model.trim="user.username"
+          :disabled="!$isSuperAdmin"
           label="Username"
-          disabled
           outlined
         />
       </v-col>
       <v-col cols="12" sm="6">
         <v-text-field
           v-model.trim="user.email"
+          :disabled="!$isSuperAdmin"
           label="Email"
-          disabled
+          outlined
+        />
+      </v-col>
+      <v-col cols="12" sm="6">
+        <v-text-field
+          v-model.trim="user.preferredEmail"
+          label="Preferred Email"
           outlined
         />
       </v-col>
@@ -72,6 +77,13 @@
         Joined on: {{ joinedAt }}
       </div>
       <v-spacer />
+      <delete-dialog v-if="$isSuperAdmin" :name="user.name" @delete="removeUser">
+        <template #activator="{ on }">
+          <v-btn :loading="loading" color="error" text v-on="on">
+            Delete
+          </v-btn>
+        </template>
+      </delete-dialog>
       <primary-btn
         :loading="loading"
         @click="saveUser"
@@ -142,6 +154,14 @@ export default {
       } catch (err) {
         this.$handleError(err, 'saving user');
       }
+      this.loading = false;
+    },
+    async removeUser() {
+      this.loading = true;
+      await this.$try('deleting user', async () => {
+        await this.user.remove();
+        this.$router.push('/user');
+      }, { success: true });
       this.loading = false;
     },
   },
