@@ -110,7 +110,7 @@ import AccessLog from '@/components/access/log.vue';
 import AccessFilterDialog from '@/components/access/filter-dialog.vue';
 import searchRegex from '@/util/search-regex';
 import ExportUsers from '@/components/users/export-users.vue';
-import AddUserDialog from '@/components/users/add-dialog.vue';
+import AddUserDialog from '@/components/users/add-user-dialog.vue';
 
 export default {
   components: {

@@ -79,7 +79,7 @@ export default {
     },
     emailErrors() {
       if (!this.$v.email.$dirty) return '';
-      if (!this.$v.email.required) return 'Email is required';
+      if (!this.$v.email.required) return `${this.domain === 'other' ? 'Email' : 'Pheme'} is required`;
       if (!this.$v.email.email) return 'Email must be valid';
       if (!this.$v.email.pheme) return 'Pheme Number must be valid';
       return '';
