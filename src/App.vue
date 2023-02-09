@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     showNav() {
-      return !this.$route.meta.isPublic;
+      return !this.$route.meta.isPublic || !this.$user?._id;
     },
   },
 };

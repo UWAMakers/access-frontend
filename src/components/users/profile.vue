@@ -36,6 +36,20 @@
           outlined
           hide-details
         />
+        <v-alert
+          v-if="user.preferences.email !== user.preferredEmail"
+          type="warning"
+          class="mt-4"
+        >
+          Changing your preferred email will require you to verify it.
+        </v-alert>
+        <v-alert
+          v-if="$user.preferences.email !== $user.preferredEmail"
+          type="warning"
+          class="mt-4"
+        >
+          Your current preferred email is not yet verified.
+        </v-alert>
       </v-card-text>
       <v-card-actions>
         <v-spacer />

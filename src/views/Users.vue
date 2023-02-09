@@ -7,11 +7,20 @@
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title class="title">
-            User Management
+            Users
           </v-list-item-title>
         </v-list-item-content>
         <v-list-item-action v-if="$isSuperAdmin">
           <export-users :filter="{ 'preferences.joinedAt': { $gt: (new Date(0)).toJSON() } }" />
+        </v-list-item-action>
+        <v-list-item-action v-if="$isSuperAdmin">
+          <add-user-dialog>
+            <template #activator="{ on }">
+              <v-btn icon v-on="on">
+                <v-icon>mdi-account-plus</v-icon>
+              </v-btn>
+            </template>
+          </add-user-dialog>
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
@@ -101,6 +110,7 @@ import AccessLog from '@/components/access/log.vue';
 import AccessFilterDialog from '@/components/access/filter-dialog.vue';
 import searchRegex from '@/util/search-regex';
 import ExportUsers from '@/components/users/export-users.vue';
+import AddUserDialog from '@/components/users/add-user-dialog.vue';
 
 export default {
   components: {
@@ -111,6 +121,7 @@ export default {
     AccessLog,
     AccessFilterDialog,
     ExportUsers,
+    AddUserDialog,
   },
   data() {
     return {
