@@ -28,11 +28,12 @@ export default {
     };
   },
   computed: {
-  	apiUrl() {
+    apiUrl() {
       let apiUrl = process.env.VUE_APP_API_URL;
       if (apiUrl === '/') apiUrl = window.location.origin;
       if (!/\/$/.test(apiUrl)) apiUrl = `${apiUrl}/`;
-  	},
+      return apiUrl;
+    },
   },
   mounted() {
     this.verify();
