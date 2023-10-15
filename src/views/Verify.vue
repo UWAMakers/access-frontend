@@ -27,6 +27,13 @@ export default {
       loading: true,
     };
   },
+  computed: {
+  	apiUrl() {
+      let apiUrl = process.env.VUE_APP_API_URL;
+      if (apiUrl === '/') apiUrl = window.location.origin;
+      if (!/\/$/.test(apiUrl)) apiUrl = `${apiUrl}/`;
+  	},
+  },
   mounted() {
     this.verify();
   },
@@ -53,7 +60,7 @@ export default {
         return null;
       }
       try {
-        await fetch(`${process.env.VUE_APP_API_URL}/tokens-actions/${token}`);
+        await fetch(`${this.apiUrl}tokens-actions/${token}`);
         this.title = '🎉 Success!';
         switch (action) {
           case 'verify_preferred_email':
