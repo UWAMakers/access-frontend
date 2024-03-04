@@ -144,7 +144,9 @@ export default {
       this.loading = false;
     },
     getLoginUrl(login) {
-      return `${process.env.VUE_APP_API_URL}/oauth/${login.ref}?redirect=/`;
+      let apiUrl = process.env.VUE_APP_API_URL;
+      if (apiUrl === '/') apiUrl = window.location.origin;
+      return `${apiUrl}/oauth/${login.ref}?redirect=/`;
     },
   },
 };

@@ -150,7 +150,9 @@ export default {
     getLoginUrl(login) {
       const jwt = encodeURIComponent(this.$store.state.auth.accessToken);
       const redirect = encodeURIComponent(`/?link_success=${login.ref}`);
-      return `${process.env.VUE_APP_API_URL}/oauth/${login.ref}?redirect=${redirect}&feathers_token=${jwt}`;
+      let apiUrl = process.env.VUE_APP_API_URL;
+      if (apiUrl === '/') apiUrl = window.location.origin;
+      return `${apiUrl}/oauth/${login.ref}?redirect=${redirect}&feathers_token=${jwt}`;
     },
     async unlinkLogin(login) {
       const { User } = this.$FeathersVuex.api;
