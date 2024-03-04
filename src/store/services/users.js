@@ -1,5 +1,10 @@
 // src/store/services/users.js
-import feathersClient, { makeServicePlugin, BaseModel } from '../../feathers-client';
+import feathersClient, { makeServicePlugin, BaseModel, transport } from '../../feathers-client';
+
+const servicePath = 'users';
+feathersClient.use(servicePath, transport.service(servicePath), {
+  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'unlinkSocialLogin'],
+});
 
 const fix = (name = '') => name.trim().replace(/\s+\(\d+\)$/, '');
 
@@ -25,8 +30,11 @@ class User extends BaseModel {
       roles: [],
     };
   }
+
+  static unlinkSocialLogin(provider) {
+    return feathersClient.service(servicePath).unlinkSocialLogin({ provider });
+  }
 }
-const servicePath = 'users';
 const servicePlugin = makeServicePlugin({
   Model: User,
   service: feathersClient.service(servicePath),

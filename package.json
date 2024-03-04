@@ -4,14 +4,15 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "start": "vue-cli-service serve"
   },
   "dependencies": {
-    "@feathersjs/authentication-client": "^4.5.11",
-    "@feathersjs/feathers": "^4.5.11",
-    "@feathersjs/socketio-client": "^4.5.11",
+    "@feathersjs/authentication-client": "^5.0.23",
+    "@feathersjs/feathers": "^5.0.23",
+    "@feathersjs/socketio-client": "^5.0.23",
     "@vue/composition-api": "^1.0.0-rc.6",
     "chart.js": "2",
     "core-js": "^3.6.5",
@@ -27,7 +28,7 @@
     "qr-code-styling": "^1.6.0-rc.0",
     "sanitize-html": "^2.4.0",
     "slugify": "^1.5.3",
-    "socket.io-client": "^2.0.1",
+    "socket.io-client": "^4.7.4",
     "tiny-sha256": "^1.0.2",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.1",

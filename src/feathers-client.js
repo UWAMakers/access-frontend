@@ -6,9 +6,10 @@ import { iff, discard } from 'feathers-hooks-common';
 import feathersVuex from 'feathers-vuex';
 
 const socket = io(process.env.VUE_APP_API_URL, { transports: ['websocket'] });
+const transport = socketio(socket);
 
 const feathersClient = feathers()
-  .configure(socketio(socket))
+  .configure(transport)
   .configure(auth({ storage: window.localStorage }))
   .hooks({
     before: {
@@ -66,5 +67,5 @@ const {
 );
 
 export {
-  makeAuthPlugin, makeServicePlugin, BaseModel, models, FeathersVuex,
+  makeAuthPlugin, makeServicePlugin, BaseModel, models, FeathersVuex, transport,
 };

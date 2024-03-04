@@ -93,6 +93,7 @@ export default {
             firstName: this.firstName,
             lastName: this.lastName,
           },
+          linkToken: this.$route.query.linkToken || undefined,
         });
       } catch (error) {
         if (error.data?.action) {

@@ -1,6 +1,21 @@
 <template>
   <div>
     <v-card-text>
+      <div v-if="!linkToken">
+        <v-btn
+          v-for="login in socialLogins"
+          :key="login.ref"
+          :color="login.color"
+          :dark="login.isDark"
+          block
+          depressed
+          :href="getLoginUrl(login)"
+          >
+          <simple-icon :icon="login.icon" :color="login.isDark ? 'white' : 'black'" left />
+          Continue with {{ login.name }}
+        </v-btn>
+        <v-divider class="my-4" />
+      </div>
       <v-select
         v-model="domain"
         :items="domainOptions"
@@ -42,6 +57,7 @@
 <script>
 import { validationMixin } from 'vuelidate';
 import { required, email } from 'vuelidate/lib/validators';
+import socialLogins from '@/util/social-logins';
 
 export default {
   mixins: [validationMixin],
@@ -69,6 +85,7 @@ export default {
       loading: false,
       errMsg: '',
       domain: '',
+      socialLogins,
     };
   },
   computed: {
@@ -83,6 +100,9 @@ export default {
       if (!this.$v.email.email) return 'Email must be valid';
       if (!this.$v.email.pheme) return 'Pheme Number must be valid';
       return '';
+    },
+    linkToken() {
+      return this.$route.query.linkToken;
     },
   },
   watch: {
@@ -110,6 +130,7 @@ export default {
         await this.$store.dispatch('auth/authenticate', {
           strategy: 'magic',
           email: this.email,
+          linkToken: this.linkToken || undefined,
         });
       } catch (error) {
         if (error.data?.action) {
@@ -121,6 +142,9 @@ export default {
         }
       }
       this.loading = false;
+    },
+    getLoginUrl(login) {
+      return `${process.env.VUE_APP_API_URL}/oauth/${login.ref}?redirect=/`;
     },
   },
 };

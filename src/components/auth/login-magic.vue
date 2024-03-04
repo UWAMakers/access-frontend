@@ -8,6 +8,12 @@
         {{ errMsg }}
       </v-alert>
     </v-card-text>
+    <v-card-text v-show="hasLinkToken" class="py-0">
+      <v-alert color="info" text>
+        Before you can continue, we need to verify your uwa pheme account.<br>
+        You'll only need to do this once.
+      </v-alert>
+    </v-card-text>
     <v-tabs-items v-model="tab">
       <v-tab-item value="email">
         <login-magic-email
@@ -56,6 +62,11 @@ export default {
       domains: ['student.uwa.edu.au', 'uwa.edu.au'],
     };
   },
+  computed: {
+    hasLinkToken() {
+      return this.$route.query.linkToken;
+    },
+  },
   watch: {
     action: {
       handler(to, from) {
@@ -81,6 +92,7 @@ export default {
             this.title = 'Login';
             break;
         }
+        if (this.hasLinkToken) this.title = 'Verify Pheme';
       },
       immediate: true,
     },

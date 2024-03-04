@@ -1,6 +1,11 @@
 <template>
   <v-avatar :color="color" v-bind="$attrs" v-on="$listeners">
-    <span class="white--text">
+    <img
+      v-if="avatarUrl"
+      :src="avatarUrl"
+      alt=""
+    />
+    <span v-else class="white--text">
       {{ initials }}
     </span>
   </v-avatar>
@@ -28,6 +33,9 @@ export default {
   computed: {
     initials() {
       return this.user.firstName.charAt(0) + this.user.lastName.charAt(0);
+    },
+    avatarUrl() {
+      return this.user.preferences?.avatarUrl || '';
     },
     color() {
       // eslint-disable-next-line

@@ -77,6 +77,7 @@ export default {
       );
     },
     showInduction() {
+      if (!this.$user) return false;
       const { TrainingItem } = this.$FeathersVuex.api;
       const { total } = TrainingItem.findInStore({
         query: {
