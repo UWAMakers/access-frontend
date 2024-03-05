@@ -22,6 +22,12 @@ export default {
       return !this.$route.meta.isPublic || !this.$user?._id;
     },
   },
+  mounted() {
+    const { origin } = window.location;
+    if (origin === 'https://uwamakers.com') {
+      window.location.href = window.location.href.replace(origin, 'https://access.uwamakers.com');
+    }
+  },
 };
 </script>
 
